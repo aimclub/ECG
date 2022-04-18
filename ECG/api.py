@@ -21,6 +21,9 @@ class RiskMarkers:
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
     raise NotImplementedError()
 
+def check_ST_elevation(s: np.ndarray) -> bool:
+    raise NotImplementedError()
+
 def evaluate_risk_markers(s: np.ndarray) -> RiskMarkers:
     raise NotImplementedError()
 
