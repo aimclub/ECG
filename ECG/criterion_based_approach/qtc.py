@@ -1,5 +1,5 @@
 import numpy as np
-from util import samples_to_ms
+from criterion_based_approach.util import samples_to_ms
 from math import isnan, nan
 
 def get_intersection_for_descending_feature(ecg_cleaned, peaks, p_offsets, rr, segment_relative_length):
@@ -38,6 +38,15 @@ def get_t_offsets(ecg_cleaned, t_peaks, p_offsets, rr, segment_relative_length=0
 
 def get_qt_intervals(q_onsets, t_offsets):
     return t_offsets - q_onsets
+
+
+def get_median_qt(ecg_cleaned, ecg_parameters):
+    q_onsets = get_q_onsets(ecg_cleaned, ecg_parameters['Q_peaks'], ecg_parameters['P_offsets'], ecg_parameters['RR'])
+    t_offsets = get_t_offsets(ecg_cleaned, ecg_parameters['T_peaks'], ecg_parameters['P_offsets'], ecg_parameters['RR'])
+
+    qt_intervals = get_qt_intervals(q_onsets, t_offsets)
+
+    return round(np.nanmedian(qt_intervals))
 
 
 def bazett(qt, rr):

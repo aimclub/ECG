@@ -1,5 +1,5 @@
 import numpy as np
-from util import get_channel, get_values_ignoring_nan
+from criterion_based_approach.util import get_channel, get_values_ignoring_nan
 
 def get_median_r_amplitude(ecg_signal, sampling_rate, ecg_parameters):
     ecg_signal_v4, _ = get_channel(ecg_signal, sampling_rate, 'V4')

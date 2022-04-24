@@ -1,5 +1,5 @@
 import numpy as np
-from util import get_channel, get_values_ignoring_nan
+from criterion_based_approach.util import get_channel, get_values_ignoring_nan
 
 def get_j_points_neurokit(ecg_parameters):
     return ecg_parameters['S_offsets']
