@@ -3,6 +3,8 @@ import numpy as np
 from dataclasses import dataclass
 from enum import Enum
 from typing import Tuple
+from digitization.preprocessing import open_image, image_rotation, binarization
+from digitization.digitization import grid_detection, signal_extraction
 
 
 class Diagnosis(Enum):
@@ -19,7 +21,13 @@ class RiskMarkers:
 
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
-    raise NotImplementedError()
+    image = open_image(image)
+    rotated_image = image_rotation(image)
+    scale = grid_detection(rotated_image)
+    binary_image = binarization(rotated_image)
+    ecg_signal = signal_extraction(binary_image, scale)
+
+    return ecg_signal   
 
 def check_ST_elevation(s: np.ndarray) -> bool:
     raise NotImplementedError()
