@@ -8,6 +8,14 @@ class Diagnosis(Enum):
 
 @dataclass
 class RiskMarkers:
+    """
+    Store evaluated ECG risk markers
+
+    Attributes:
+        Ste60_V3: ST segment elevation in lead V3, mm
+        QTc: The corrected QT interval, ms
+        RA_V4: R-peak amplitude in lead V4, mm
+    """
     Ste60_V3: float
     QTc: float
     RA_V4: float
