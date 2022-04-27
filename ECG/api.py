@@ -1,23 +1,8 @@
 from PIL import Image
 import numpy as np
-from dataclasses import dataclass
-from enum import Enum
 from typing import Tuple
-from ECG.criterion_based_approach.pipeline import process_recording, get_ste
-
-
-class Diagnosis(Enum):
-    MI = 'Myocardial Infarction'
-    BER = 'Benign Early Repolarization'
-
-
-@dataclass
-class RiskMarkers:
-    Ste60_V3: float
-    QTc: float
-    RA_V4: float
-
-
+from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
+from ECG.data_classes import Diagnosis, RiskMarkers
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
     raise NotImplementedError()
@@ -28,13 +13,13 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> bool:
 
 
 def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers:
-    _, _, qtc, r_amplitude, ste60 = process_recording(signal, sampling_rate)
-
-    return RiskMarkers(Ste60_V3=ste60, QTc=qtc, RA_V4=r_amplitude)
+    return detect_risk_markers(signal, sampling_rate)
 
 
 def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int) -> Tuple[Diagnosis, str]:
-    stemi_diagnosis, stemi_criterion, _, _, _ = process_recording(signal, sampling_rate)
+    risk_markers = evaluate_risk_markers(signal, sampling_rate)
+    stemi_diagnosis, stemi_criterion = diagnose(risk_markers)
+
     diagnosis_enum = Diagnosis.MI if stemi_diagnosis else Diagnosis.BER
     explanation = 'Criterion value calculated as follows: ' + \
         '(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = ' + str(stemi_criterion) + \
