@@ -1,5 +1,5 @@
 import numpy as np
-from criterion_based_approach.util import samples_to_ms
+from ECG.criterion_based_approach.util import samples_to_ms
 from math import isnan, nan
 
 def get_intersection_for_descending_feature(ecg_cleaned, peaks, p_offsets, rr, segment_relative_length):

@@ -1,9 +1,9 @@
-from criterion_based_approach.util import get_channel
-from criterion_based_approach.ecg_features import get_ecg_parameters
-from criterion_based_approach.qtc import get_median_qt, get_qtc
-from criterion_based_approach.r_amplitude import get_median_r_amplitude
-from criterion_based_approach.st_elevation import get_median_ste60
-from criterion_based_approach.criterion import calculate_stemi_criterion, get_stemi_diagnosis
+from ECG.criterion_based_approach.util import get_channel
+from ECG.criterion_based_approach.ecg_features import get_ecg_parameters
+from ECG.criterion_based_approach.qtc import get_median_qt, get_qtc
+from ECG.criterion_based_approach.r_amplitude import get_median_r_amplitude
+from ECG.criterion_based_approach.st_elevation import get_median_ste60
+from ECG.criterion_based_approach.criterion import calculate_stemi_criterion, get_stemi_diagnosis
 
 def process_recording(ecg_signal, sampling_rate):
     ## Peaks

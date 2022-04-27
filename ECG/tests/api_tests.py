@@ -1,9 +1,5 @@
-import os, sys
-sys.path.insert(0, os.getcwd())
-sys.path.insert(1, os.getcwd() + '\ECG')
-
-from ECG import api
-from test_util import get_ecg_signal
+import ECG.api as api
+from ECG.tests.test_util import get_ecg_signal
 
 def convert_image_to_signal_test():
     raise NotImplementedError()

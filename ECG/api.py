@@ -3,7 +3,7 @@ import numpy as np
 from dataclasses import dataclass
 from enum import Enum
 from typing import Tuple
-from criterion_based_approach.pipeline import process_recording, get_ste
+from ECG.criterion_based_approach.pipeline import process_recording, get_ste
 
 
 class Diagnosis(Enum):
