@@ -58,13 +58,13 @@ def diagnose_with_STEMI_test():
     print('Diagnosis')
     print('Expected: Myocardial Infarction')
     print('Got:      ' + str(stemi_positive[0].value) + '\n')
-    print('Expected: Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = 30.735000000000003 did not exceed the threshold 28.13, therefore the diagnosis is Myocardial Infarction')
+    print('Expected: Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = 30.735000000000003 did not exceed the threshold 27.1, therefore the diagnosis is Myocardial Infarction')
     print('Got:      ' + str(stemi_positive[1]) + '\n')
 
     print('Diagnosis')
     print('Expected: Benign Early Repolarization')
     print('Got:      ' + str(stemi_negative[0].value) + '\n')
-    print('Expected: Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = 25.94940929212383 exceeded the threshold 28.13, therefore the diagnosis is Benign Early Repolarization')
+    print('Expected: Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = 25.94940929212383 exceeded the threshold 27.1, therefore the diagnosis is Benign Early Repolarization')
     print('Got:      ' + str(stemi_negative[1]) + '\n')
 
     print('***\n')
