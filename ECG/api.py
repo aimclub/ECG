@@ -3,8 +3,8 @@ import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
 from ECG.data_classes import Diagnosis, RiskMarkers
-from digitization.preprocessing import open_image, image_rotation, binarization
-from digitization.digitization import grid_detection, signal_extraction
+from ECG.digitization.preprocessing import open_image, image_rotation, binarization
+from ECG.digitization.digitization import grid_detection, signal_extraction
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
     image = open_image(image)
