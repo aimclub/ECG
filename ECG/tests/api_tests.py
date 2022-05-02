@@ -57,3 +57,23 @@ def test_diagnose_with_STEMI():
     assert stemi_negative[0] == Diagnosis.BER, "Failed to recognize BER"
     expected_explanation = "Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = 26.3252135133801 exceeded the threshold 28.13, therefore the diagnosis is Benign Early Repolarization"
     assert stemi_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_negative[1]}"
+    print('***\n')
+
+def diagnose_with_NN_test():
+    filename_not_ber = './ECG/tests/test_data/NotBER.mat'
+    filename_er = './ECG/tests/test_data/BER.mat'
+    signal_not_ber = get_ecg_signal(filename_not_ber)
+    signal_er = get_ecg_signal(filename_er)
+
+    model_name = './ECG/NN_based_approach/Models/Conv_model.pt'
+    ber_positive = api.diagnose_with_NN(signal_er, model_name=model_name, threshold=0.7)
+    ber_negative = api.diagnose_with_NN(signal_not_ber, model_name=model_name, threshold=0.7)
+
+    print('\n***')
+    print('diagnose_with_NN_test\n')
+    print('Diagnosis')
+    print('Expected: Benign Early Repolarization')
+    print('Got:      ' + str(ber_positive[0].value) + '\n')
+    print('Expected: Unknown Diagnosis')
+    print('Got:      ' + str(ber_negative[0].value) + '\n')
+    print('***\n')
