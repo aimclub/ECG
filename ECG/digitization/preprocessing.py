@@ -1,19 +1,7 @@
-from pathlib import Path
 import numpy as np
 import math
-from PIL import Image
 import cv2
 from scipy import ndimage
-
-
-def open_image(path: str) -> np.ndarray:
-	assert Path(path).exists()
-
-	data = Image.open(path)
-	assert data is not None
-
-	data = np.asarray(data)
-	return data
 
 
 def image_rotation(image: np.ndarray, angle: int = None) -> np.ndarray:

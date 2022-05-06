@@ -1,14 +1,15 @@
 import ECG.api as api
-from ECG.tests.test_util import get_ecg_signal, get_ecg_array
+from ECG.tests.test_util import get_ecg_signal, get_ecg_array, open_image
 
 def convert_image_to_signal_test():
     image_filename = './ECG/tests/test_data/ecg_image.jpg'
     array_filename = './ECG/tests/test_data/ecg_array.npy'
 
     signal = get_ecg_array(array_filename)
-    result = api.convert_image_to_signal_test(image_filename)
+    image = open_image(image_filename)
+    result = api.convert_image_to_signal(image)
 
-    assert result == signal, 'Got wrong converted signal'
+    assert (signal == result).all()
 
 
 def check_ST_test():
