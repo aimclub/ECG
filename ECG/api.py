@@ -3,10 +3,17 @@ import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
 from ECG.data_classes import Diagnosis, RiskMarkers
+from ECG.digitization.preprocessing import image_rotation, binarization
+from ECG.digitization.digitization import grid_detection, signal_extraction
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
-    raise NotImplementedError()
+    image = np.asarray(image)
+    rotated_image = image_rotation(image)
+    scale = grid_detection(rotated_image)
+    binary_image = binarization(rotated_image)
+    ecg_signal = signal_extraction(binary_image, scale)
 
+    return ecg_signal 
 
 def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> bool:
     return get_ste(signal, sampling_rate)
