@@ -9,8 +9,6 @@ def process_recording(signal: np.ndarray, net_type: NNType, model_dir: str) -> n
 
     if net_type == NNType.Conv:
         net = ConvNet(n_classes=1)
-    elif net_type == NNType.Conv1:
-        net = ConvNet1(n_classes=1)
     else:
         assert False, "Key 'net_type' must be one of NNType enum"
 
