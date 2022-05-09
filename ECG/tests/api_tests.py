@@ -65,15 +65,15 @@ def diagnose_with_NN_test():
     signal_not_ber = get_ecg_signal(filename_not_ber)
     signal_er = get_ecg_signal(filename_er)
 
-    model_name = './ECG/NN_based_approach/Models/Conv_model.pt'
-    ber_positive = api.diagnose_with_NN(signal_er, model_name=model_name, threshold=0.7)
-    ber_negative = api.diagnose_with_NN(signal_not_ber, model_name=model_name, threshold=0.7)
+    model_dir = './ECG/NN_based_approach/Models/'
+    ber_positive = api.diagnose_with_NN(signal_er, threshold=0.7, model_dir=model_dir)
+    ber_negative = api.diagnose_with_NN(signal_not_ber, threshold=0.7, model_dir=model_dir)
 
     print('\n***')
     print('diagnose_with_NN_test\n')
     print('Diagnosis')
     print('Expected: Benign Early Repolarization')
-    print('Got:      ' + str(ber_positive[0].value) + '\n')
+    print('Got:      ' + str(ber_positive[0].value) + '\n' + ber_positive[1])
     print('Expected: Unknown Diagnosis')
-    print('Got:      ' + str(ber_negative[0].value) + '\n')
+    print('Got:      ' + str(ber_negative[0].value) + '\n' + ber_negative[1])
     print('***\n')
