@@ -12,3 +12,6 @@
 ## Data Requirement
 * Required ECG frequency: 500 Hz
 * Required length: ≥ 5s
+
+## Description of Models and Algorithms
+[link](docs/main.md)
