@@ -3,12 +3,15 @@
 
 
 ## Installation
-1. create conda enviroment `conda env create -f environment.yml`
+1. install pip requirements `pip install -r requirements.tx`
 
 ## Run tests
-1. `conda activate ECG`
-2. `conda run python .\run_tests.py`
+1. `pytest run_tests.py`
+
 
 ## Data Requirement
 * Required ECG frequency: 500 Hz
 * Required length: ≥ 5s
+
+## Description of Models and Algorithms
+[link](docs/main.md)
