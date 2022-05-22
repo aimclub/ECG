@@ -50,12 +50,12 @@ def test_diagnose_with_STEMI():
 
     # positive
     assert stemi_positive[0] == Diagnosis.MI, "Failed to recognize MI"
-    expected_explanation = "Criterion value calculated as follows: (2.9 * ([STE60 V3 in mm] - 3.2)) + (0.3 * ([QTc in ms] - 458.3)) + (-1.7 * (min([RA V4 in mm], 19) - 14.1)) = 28.669999999999995 exceeded the threshold 4.1, therefore the diagnosis is Myocardial Infarction"
+    expected_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) = 151.47 exceeded the threshold 126.9, therefore the diagnosis is Myocardial Infarction"
     assert stemi_positive[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_positive[1]}"
 
     # negative
     assert stemi_negative[0] == Diagnosis.BER, "Failed to recognize BER"
-    expected_explanation = "Criterion value calculated as follows: (2.9 * ([STE60 V3 in mm] - 3.2)) + (0.3 * ([QTc in ms] - 458.3)) + (-1.7 * (min([RA V4 in mm], 19) - 14.1)) = -4.393713052840898 did not exceed the threshold 4.1, therefore the diagnosis is Benign Early Repolarization"
+    expected_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) = 118.4062869471591 did not exceed the threshold 126.9, therefore the diagnosis is Benign Early Repolarization"
     assert stemi_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_negative[1]}"
 
 def test_diagnose_with_NN_test():

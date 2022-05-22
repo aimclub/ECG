@@ -31,9 +31,9 @@ def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int) -> Tuple[Diagnos
 
     diagnosis_enum = Diagnosis.MI if stemi_diagnosis else Diagnosis.BER
     explanation = 'Criterion value calculated as follows: ' + \
-        '(2.9 * ([STE60 V3 in mm] - 3.2)) + (0.3 * ([QTc in ms] - 458.3)) + (-1.7 * (min([RA V4 in mm], 19) - 14.1)) = ' + str(stemi_criterion) + \
+        '(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) = ' + str(stemi_criterion) + \
         (' did not exceed ', ' exceeded ')[stemi_diagnosis] + \
-        'the threshold 4.1, therefore the diagnosis is ' + diagnosis_enum.value
+        'the threshold 126.9, therefore the diagnosis is ' + diagnosis_enum.value
 
     return (diagnosis_enum, explanation)
 
