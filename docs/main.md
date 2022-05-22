@@ -30,7 +30,7 @@ Diagnostic is performed via the modified criterion formula [1]. In the original 
 
 The original formula was modified by adding a maximal R-peak amplitude parameter and the coefficient values were optimized by a logistic regression model with SGD learning.
 
-The modified formula is as follows: (2.9 * (ste60_mm - 3.2)) + (0.3 * (qtc_ms - 458.3)) + (-1.7 * (np.minimum(r_amplitude_mm, 19) - 14.1)) >= 4.1
+The modified formula is as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) >= 126.9
  
 
 [1] - Smith SW, Khalil A, Henry TD, Rosas M, Chang RJ, Heller K, Scharrer E, Ghorashi M, Pearce LA.
