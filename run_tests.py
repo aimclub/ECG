@@ -1,1 +1,0 @@
-from ECG.tests.api_tests import *
