@@ -1,3 +1,4 @@
+import numpy as np
 import ECG.api as api
 from ECG.data_classes import Diagnosis
 from ECG.tests.test_util import get_ecg_signal, get_ecg_array, open_image
@@ -10,7 +11,7 @@ def test_convert_image_to_signal():
     image = open_image(image_filename)
     result = api.convert_image_to_signal(image)
 
-    assert (signal == result).all(), 'Recognized signal does not match the original'
+    assert (signal == result).all(), f'Recognized signal does not match the original. Max difference is {np.abs(signal - result).max()}'
 
 
 def test_check_ST():
