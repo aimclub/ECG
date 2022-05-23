@@ -59,7 +59,7 @@ def test_diagnose_with_STEMI():
     assert stemi_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_negative[1]}"
     print('***\n')
 
-def diagnose_with_NN_test():
+def test_diagnose_with_NN_test():
     filename_not_ber = './ECG/tests/test_data/NotBER.mat'
     filename_er = './ECG/tests/test_data/BER.mat'
     signal_not_ber = get_ecg_signal(filename_not_ber)
