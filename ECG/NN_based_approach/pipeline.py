@@ -1,11 +1,11 @@
-from ECG.NN_based_approach.Networks.ConvNet1 import ConvNet1
 from ECG.NN_based_approach.Networks.ConvNet import ConvNet
 from ECG.NN_based_approach.NNType import NNType
 import numpy as np
 import torch
 
-def process_recording(signal: np.ndarray, net_type: NNType, model_dir: str) -> np.double:
+def process_recording(signal: np.ndarray, net_type: NNType) -> np.double:
     device = torch.device('cpu')
+    model_dir = './ECG/NN_based_approach/Models/'
 
     if net_type == NNType.Conv:
         net = ConvNet(n_classes=1)
@@ -18,6 +18,7 @@ def process_recording(signal: np.ndarray, net_type: NNType, model_dir: str) -> n
     net.eval()
 
     x_val = torch.from_numpy(signal).float().reshape(1,1,12,5000)
-    pred = net.forward(x_val.to(torch.device('cpu')))
+    with torch.no_grad():
+        pred = net.forward(x_val)
     return pred.cpu().detach().item()
 

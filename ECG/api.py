@@ -38,8 +38,8 @@ def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int) -> Tuple[Diagnos
     return (diagnosis_enum, explanation)
 
 
-def diagnose_with_NN(signal: np.ndarray, threshold: np.float, model_dir: str) -> Tuple[Diagnosis, str]:
-    result = process_recording(signal, NNType.Conv, model_dir=model_dir)
-    diagnosis = Diagnosis.BER if result > threshold else Diagnosis.Unknown
+def diagnose_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+    result = process_recording(signal, NNType.Conv)
+    diagnosis = Diagnosis.BER if result > 0.7 else Diagnosis.Unknown
     explanation = 'Neutal Network calculated: the probability of BER is ' + str(result)
     return (diagnosis, explanation)
