@@ -20,5 +20,5 @@ def process_recording(signal: np.ndarray, net_type: NNType) -> np.double:
     x_val = torch.from_numpy(signal).float().reshape(1,1,12,5000)
     with torch.no_grad():
         pred = net.forward(x_val)
-    return pred.cpu().detach().item()
+    return round(pred.cpu().detach().item(), 4)
 
