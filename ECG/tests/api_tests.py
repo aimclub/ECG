@@ -57,7 +57,6 @@ def test_diagnose_with_STEMI():
     assert stemi_negative[0] == Diagnosis.BER, "Failed to recognize BER"
     expected_explanation = "Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) - (0.326 * min([RA V4 in mm], 15)) = 26.3252135133801 exceeded the threshold 28.13, therefore the diagnosis is Benign Early Repolarization"
     assert stemi_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_negative[1]}"
-    print('***\n')
 
 def test_diagnose_with_NN_test():
     filename_not_ber = './ECG/tests/test_data/NotBER.mat'
@@ -75,4 +74,3 @@ def test_diagnose_with_NN_test():
     assert ber_negative[0] != Diagnosis.BER, f"Wrong explanation\n\tGot {ber_negative[0]}"
     expected_explanation = "Neutal Network calculated: the probability of BER is 0.5973"
     assert ber_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {ber_negative[1]}"
-    print('***\n')
