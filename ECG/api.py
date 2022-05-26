@@ -17,8 +17,15 @@ def convert_image_to_signal(image: Image.Image) -> np.ndarray:
 
     return ecg_signal 
 
-def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> bool:
-    return get_ste(signal, sampling_rate)
+def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[bool, float, str]:
+    elevation_threshold = 0.2
+    ste_mV = get_ste(signal, sampling_rate)
+    ste_bool = ste_mV > elevation_threshold
+
+    explanation = 'ST elevation value in lead V3 (' + str(ste_mV) + ' mV)' + (' did not exceed ', ' exceeded ')[ste_bool] + \
+        'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + (' not detected.', ' detected.')[ste_bool]
+
+    return (ste_bool, ste_mV, elevation_threshold, explanation)
 
 
 def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers:

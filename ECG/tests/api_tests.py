@@ -19,9 +19,15 @@ def test_check_ST():
     filename = './ECG/tests/test_data/MI.mat'
     sampling_rate = 500
     signal = get_ecg_signal(filename)
-    ste = api.check_ST_elevation(signal, sampling_rate)
-    ste_expected = 0.225
-    assert ste == ste_expected, f"Failed to predict ST probability: expected {ste_expected}, got {ste}"
+    ste_bool, ste_mV, threshold, explanation = api.check_ST_elevation(signal, sampling_rate)
+    expected_ste_mV = 0.225
+    expected_ste_bool = True
+
+    assert ste_mV == expected_ste_mV, f"Failed to predict ST elevation value in mV: expected {expected_ste_mV}, got {ste_mV}"
+    assert ste_bool == expected_ste_bool, "Failed to recognize significant ST elevation"
+
+    expected_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded the threshold 0.2, therefore ST elevation was detected."
+    assert explanation == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {explanation}"
 
 
 def test_evaluate_risk_markers():
