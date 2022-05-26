@@ -45,18 +45,26 @@ def test_diagnose_with_STEMI():
     signal_stemi = get_ecg_signal(filename_stemi)
     signal_er = get_ecg_signal(filename_er)
 
-    stemi_positive = api.diagnose_with_STEMI(signal_stemi, sampling_rate)
-    stemi_negative = api.diagnose_with_STEMI(signal_er, sampling_rate)
+    stemi_positive_tuned = api.diagnose_with_STEMI(signal_stemi, sampling_rate, True)
+    stemi_negative_tuned = api.diagnose_with_STEMI(signal_er, sampling_rate, True)
 
-    # positive
-    assert stemi_positive[0] == Diagnosis.MI, "Failed to recognize MI"
+    # positive tuned
+    assert stemi_positive_tuned[0] == Diagnosis.MI, "Failed to recognize MI"
     expected_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) = 151.47 exceeded the threshold 126.9, therefore the diagnosis is Myocardial Infarction"
-    assert stemi_positive[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_positive[1]}"
+    assert stemi_positive_tuned[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_positive_tuned[1]}"
 
-    # negative
-    assert stemi_negative[0] == Diagnosis.BER, "Failed to recognize BER"
+    # negative tuned
+    assert stemi_negative_tuned[0] == Diagnosis.BER, "Failed to recognize BER"
     expected_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) = 118.4062869471591 did not exceed the threshold 126.9, therefore the diagnosis is Benign Early Repolarization"
-    assert stemi_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_negative[1]}"
+    assert stemi_negative_tuned[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_negative_tuned[1]}"
+
+    stemi_positive_original = api.diagnose_with_STEMI(signal_stemi, sampling_rate, False)
+
+    # positive original explanation
+    assert stemi_positive_original[0] == Diagnosis.MI, "Failed to recognize MI"
+    expected_explanation = "Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) – (0.326 * [RA V4 in mm])) = 31.2231 exceeded the threshold 23.4, therefore the diagnosis is Myocardial Infarction"
+    assert stemi_positive_original[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_positive_original[1]}"
+
 
 def test_diagnose_with_NN_test():
     filename_not_ber = './ECG/tests/test_data/NotBER.mat'
