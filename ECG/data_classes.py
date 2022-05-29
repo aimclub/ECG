@@ -4,6 +4,7 @@ from dataclasses import dataclass
 class Diagnosis(Enum):
     MI = 'Myocardial Infarction'
     BER = 'Benign Early Repolarization'
+    Unknown = 'Unknown Diagnosis'
 
 
 @dataclass
