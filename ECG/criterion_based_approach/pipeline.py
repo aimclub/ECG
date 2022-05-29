@@ -28,9 +28,9 @@ def detect_risk_markers(ecg_signal, sampling_rate) -> RiskMarkers:
     return RiskMarkers(Ste60_V3=median_ste60, QTc=qtc_ms, RA_V4=median_r_amplitude)
 
 
-def diagnose(risk_markers: RiskMarkers):
-    stemi_criterion = calculate_stemi_criterion(risk_markers.QTc, risk_markers.RA_V4, risk_markers.Ste60_V3)
-    stemi_diagnosis = get_stemi_diagnosis(stemi_criterion)
+def diagnose(risk_markers: RiskMarkers, tuned: bool):
+    stemi_criterion = calculate_stemi_criterion(risk_markers.QTc, risk_markers.RA_V4, risk_markers.Ste60_V3, tuned)
+    stemi_diagnosis = get_stemi_diagnosis(stemi_criterion, tuned)
 
     return stemi_diagnosis, stemi_criterion
 
