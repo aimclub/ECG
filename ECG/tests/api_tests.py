@@ -71,6 +71,6 @@ def test_diagnose_with_NN_test():
     expected_explanation = "Neutal Network calculated: the probability of BER is 0.8727"
     assert ber_positive[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {ber_positive[1]}"
 
-    assert ber_negative[0] != Diagnosis.BER, f"Wrong explanation\n\tGot {ber_negative[0]}"
+    assert ber_negative[0] == Diagnosis.Unknown, f"Wrong explanation\n\tGot {ber_negative[0]}"
     expected_explanation = "Neutal Network calculated: the probability of BER is 0.5973"
     assert ber_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {ber_negative[1]}"
