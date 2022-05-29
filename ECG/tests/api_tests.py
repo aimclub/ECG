@@ -1,5 +1,6 @@
 import numpy as np
 import ECG.api as api
+from ECG.criterion_based_approach.pipeline import get_ste
 from ECG.data_classes import Diagnosis
 from ECG.tests.test_util import get_ecg_signal, get_ecg_array, open_image
 
@@ -19,7 +20,9 @@ def test_check_ST():
     filename = './ECG/tests/test_data/MI.mat'
     sampling_rate = 500
     signal = get_ecg_signal(filename)
-    ste_bool, ste_mV, threshold, explanation = api.check_ST_elevation(signal, sampling_rate)
+    ste_bool, explanation = api.check_ST_elevation(signal, sampling_rate)
+    ste_mV = get_ste(signal, sampling_rate)
+
     expected_ste_mV = 0.225
     expected_ste_bool = True
 
