@@ -10,18 +10,22 @@ Third step is signal detection. The grayscale image is binarized using adaptive 
 The final step is signal extraction - the list of all connected pixels of the signal is converted to the 1D array where pixels are scaled and represent amplitudes of the signal. 
 
 ## Check ST elevation
-The ST segment elevation in lead V3 (STE60) in millivolts is compared to the threshold from medical practice (0.2 mV) [1]. If the ST elevation value exceeds the threshold, it is considered significant. The distribution of normal and elevated ST recordings from the 'China Physiological Signal Challenge 2018' dataset are shown in the normalized density histogram below.
+The ST segment elevation in lead V3 (STE60) in millivolts is compared to the threshold from medical practice (0.2 mV) [1]. If the ST elevation value exceeds the threshold, it is considered significant. The distribution of normal and elevated ST recordings from the 'China Physiological Signal Challenge 2018' [2] dataset are shown in the normalized density histogram below.
 
 ![ste_histogram](https://user-images.githubusercontent.com/28919867/171233344-cd183b1c-09e6-4018-b8ea-1f4eba89a234.png)
 
-ST elevation is measured from the P-wave offset point at 60 ms after the J point (QRS offset). ECG features are detected using the Neurokit2 library [2].
+ST elevation is measured from the P-wave offset point at 60 ms after the J point (QRS offset). ECG features are detected using the Neurokit2 library [3].
 
 
 [1] - Ivan C. Rokos, William J. French, Amal Mattu, Graham Nichol, Michael E. Farkouh, James Reiffel, Gregg W. Stone,
 Appropriate Cardiac Cath Lab activation: Optimizing electrocardiogram interpretation and clinical decision-making for acute ST-elevation myocardial infarction,
 American Heart Journal, Volume 160, Issue 6, 2010, Pages 995-1003.e8, ISSN 0002-8703, https://doi.org/10.1016/j.ahj.2010.08.011.
 
-[2] - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+[2] - F. F. Liu, C. Y. Liu*, L. N. Zhao, X. Y. Zhang, X. L. Wu, X. Y. Xu, Y. L. Liu, C. Y. Ma, S. S. Wei, Z. Q. He, J. Q. Li and N. Y. Kwee.
+An open access database for evaluating the algorithms of ECG rhythm and morphology abnormal detection.
+Journal of Medical Imaging and Health Informatics, 2018, 8(7): 1368–1373.
+
+[3] - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
 Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
 Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
 
