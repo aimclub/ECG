@@ -1,7 +1,7 @@
 import numpy as np
 import ECG.api as api
 from ECG.criterion_based_approach.pipeline import get_ste
-from ECG.data_classes import Diagnosis
+from ECG.data_classes import Diagnosis, ElevatedST
 from ECG.tests.test_util import get_ecg_signal, get_ecg_array, open_image
 
 def test_convert_image_to_signal():
@@ -17,27 +17,39 @@ def test_convert_image_to_signal():
 
 
 def test_check_ST():
-    filename = './ECG/tests/test_data/MI.mat'
+    filename_ok = './ECG/tests/test_data/MI.mat'
     sampling_rate = 500
-    signal = get_ecg_signal(filename)
-    ste_bool, explanation = api.check_ST_elevation(signal, sampling_rate)
+    signal = get_ecg_signal(filename_ok)
+    ste_assessment, explanation = api.check_ST_elevation(signal, sampling_rate)
     ste_mV = get_ste(signal, sampling_rate)
 
     expected_ste_mV = 0.225
-    expected_ste_bool = True
+    expected_ste_assessment = ElevatedST.Present
 
+    # OK
     assert ste_mV == expected_ste_mV, f"Failed to predict ST elevation value in mV: expected {expected_ste_mV}, got {ste_mV}"
-    assert ste_bool == expected_ste_bool, "Failed to recognize significant ST elevation"
+    assert ste_assessment == expected_ste_assessment, "Failed to recognize significant ST elevation"
 
     expected_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded the threshold 0.2, therefore ST elevation was detected."
     assert explanation == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {explanation}"
 
+    # Fails
+    filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
+    ste_assessment_fail, explanation_fail = api.check_ST_elevation(get_ecg_signal(filename_fail), sampling_rate)
+    
+    expected_ste_assessment_fail = ElevatedST.Unknown
+    assert ste_assessment_fail == expected_ste_assessment_fail, "Failed to handle an error while assessing ST elevation"
+
+    expected_explanation_fail = "Failed to assess ST elevation due to an internal error"
+    assert explanation_fail == expected_explanation_fail, f"Wrong explanation: \n\tExpected {expected_explanation_fail} \n\tGot {explanation_fail}"
+
 
 def test_evaluate_risk_markers():
-    filename = './ECG/tests/test_data/MI.mat'
+    filename_ok = './ECG/tests/test_data/MI.mat'
     sampling_rate = 500
-    signal = get_ecg_signal(filename)
+    signal = get_ecg_signal(filename_ok)
 
+    # OK
     risk_markers = api.evaluate_risk_markers(signal, sampling_rate)
     expected = 0.225
     assert risk_markers.Ste60_V3 == expected, f"Failed to predict STE60 V3: expected {expected}, got {risk_markers.Ste60_V3}"
@@ -45,6 +57,11 @@ def test_evaluate_risk_markers():
     assert risk_markers.QTc == expected, f"Failed to predict QTc: expected {expected}, got {risk_markers.QTc}"
     expected = 0.315
     assert risk_markers.RA_V4 == expected, f"Failed to predict RA V4: expected {expected}, got {risk_markers.RA_V4}"
+
+    # Fails
+    filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
+    risk_markers_fail = api.evaluate_risk_markers(get_ecg_signal(filename_fail), sampling_rate)
+    assert risk_markers_fail is None, f"Failed to handle an error while evaluating risk markers"
 
 
 def test_diagnose_with_STEMI():
@@ -73,6 +90,13 @@ def test_diagnose_with_STEMI():
     assert stemi_positive_original[0] == Diagnosis.MI, "Failed to recognize MI"
     expected_explanation = "Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) – (0.326 * [RA V4 in mm])) = 31.2231 exceeded the threshold 23.4, therefore the diagnosis is Myocardial Infarction"
     assert stemi_positive_original[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_positive_original[1]}"
+
+    # Fails
+    filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
+    diagnosis_fail, explanation_fail = api.diagnose_with_STEMI(get_ecg_signal(filename_fail), sampling_rate)
+    assert diagnosis_fail == Diagnosis.Unknown, "Failed to handle an error during diagnostics"
+    expected_explanation_fail = "Failed to diagnose due to an internal error"
+    assert explanation_fail == expected_explanation_fail, f"Wrong explanation: \n\tExpected {expected_explanation_fail} \n\tGot {explanation_fail}"
 
 
 def test_diagnose_with_NN_test():
