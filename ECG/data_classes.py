@@ -5,11 +5,12 @@ class Diagnosis(Enum):
     MI = 'Myocardial Infarction'
     BER = 'Benign Early Repolarization'
     Unknown = 'Unknown Diagnosis'
+    Failed = 'Failed to diagnose'
 
 class ElevatedST(Enum):
     Abscent = 'No significant ST elevation'
     Present = 'Significant ST elevation'
-    Unknown = 'Failed to assess ST elevation'
+    Failed = 'Failed to assess ST elevation'
 
 
 @dataclass

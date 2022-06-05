@@ -29,7 +29,7 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
         explanation = 'ST elevation value in lead V3 (' + str(ste_mV) + ' mV)' + (' did not exceed ', ' exceeded ')[ste_bool] + \
             'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + (' not detected.', ' detected.')[ste_bool]
     except:
-        ste_assessment = ElevatedST.Unknown
+        ste_assessment = ElevatedST.Failed
         explanation = 'Failed to assess ST elevation due to an internal error'
 
     return (ste_assessment, explanation)
@@ -62,7 +62,7 @@ def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int, tuned: bool = Fa
             (' did not exceed ', ' exceeded ')[stemi_diagnosis] + \
             'the threshold ' + threshold + ', therefore the diagnosis is ' + diagnosis_enum.value
     else:
-        diagnosis_enum = Diagnosis.Unknown
+        diagnosis_enum = Diagnosis.Failed
         explanation = 'Failed to diagnose due to an internal error'
 
     return (diagnosis_enum, explanation)

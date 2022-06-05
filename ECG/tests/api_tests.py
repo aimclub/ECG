@@ -37,7 +37,7 @@ def test_check_ST():
     filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
     ste_assessment_fail, explanation_fail = api.check_ST_elevation(get_ecg_signal(filename_fail), sampling_rate)
     
-    expected_ste_assessment_fail = ElevatedST.Unknown
+    expected_ste_assessment_fail = ElevatedST.Failed
     assert ste_assessment_fail == expected_ste_assessment_fail, "Failed to handle an error while assessing ST elevation"
 
     expected_explanation_fail = "Failed to assess ST elevation due to an internal error"
@@ -94,7 +94,7 @@ def test_diagnose_with_STEMI():
     # Fails
     filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
     diagnosis_fail, explanation_fail = api.diagnose_with_STEMI(get_ecg_signal(filename_fail), sampling_rate)
-    assert diagnosis_fail == Diagnosis.Unknown, "Failed to handle an error during diagnostics"
+    assert diagnosis_fail == Diagnosis.Failed, "Failed to handle an error during diagnostics"
     expected_explanation_fail = "Failed to diagnose due to an internal error"
     assert explanation_fail == expected_explanation_fail, f"Wrong explanation: \n\tExpected {expected_explanation_fail} \n\tGot {explanation_fail}"
 
