@@ -2,11 +2,11 @@ import numpy as np
 import ECG.api as api
 from ECG.criterion_based_approach.pipeline import get_ste
 from ECG.data_classes import Diagnosis, ElevatedST
-from ECG.tests.test_util import get_ecg_signal, get_ecg_array, open_image
+from tests.test_util import get_ecg_signal, get_ecg_array, open_image
 
 def test_convert_image_to_signal():
-    image_filename = './ECG/tests/test_data/ecg_image.jpg'
-    array_filename = './ECG/tests/test_data/ecg_array.npy'
+    image_filename = './tests/test_data/ecg_image.jpg'
+    array_filename = './tests/test_data/ecg_array.npy'
 
     signal = get_ecg_array(array_filename)
     image = open_image(image_filename)
@@ -17,7 +17,7 @@ def test_convert_image_to_signal():
 
 
 def test_check_ST():
-    filename_ok = './ECG/tests/test_data/MI.mat'
+    filename_ok = './tests/test_data/MI.mat'
     sampling_rate = 500
     signal = get_ecg_signal(filename_ok)
     ste_assessment, explanation = api.check_ST_elevation(signal, sampling_rate)
@@ -34,7 +34,7 @@ def test_check_ST():
     assert explanation == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {explanation}"
 
     # Fails
-    filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
+    filename_fail = './tests/test_data/NeurokitFails.mat'
     ste_assessment_fail, explanation_fail = api.check_ST_elevation(get_ecg_signal(filename_fail), sampling_rate)
     
     expected_ste_assessment_fail = ElevatedST.Failed
@@ -45,7 +45,7 @@ def test_check_ST():
 
 
 def test_evaluate_risk_markers():
-    filename_ok = './ECG/tests/test_data/MI.mat'
+    filename_ok = './tests/test_data/MI.mat'
     sampling_rate = 500
     signal = get_ecg_signal(filename_ok)
 
@@ -59,14 +59,14 @@ def test_evaluate_risk_markers():
     assert risk_markers.RA_V4 == expected, f"Failed to predict RA V4: expected {expected}, got {risk_markers.RA_V4}"
 
     # Fails
-    filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
+    filename_fail = './tests/test_data/NeurokitFails.mat'
     risk_markers_fail = api.evaluate_risk_markers(get_ecg_signal(filename_fail), sampling_rate)
     assert risk_markers_fail is None, f"Failed to handle an error while evaluating risk markers"
 
 
 def test_diagnose_with_STEMI():
-    filename_stemi = './ECG/tests/test_data/MI.mat'
-    filename_er = './ECG/tests/test_data/BER.mat'
+    filename_stemi = './tests/test_data/MI.mat'
+    filename_er = './tests/test_data/BER.mat'
     sampling_rate = 500
     signal_stemi = get_ecg_signal(filename_stemi)
     signal_er = get_ecg_signal(filename_er)
@@ -92,7 +92,7 @@ def test_diagnose_with_STEMI():
     assert stemi_positive_original[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {stemi_positive_original[1]}"
 
     # Fails
-    filename_fail = './ECG/tests/test_data/NeurokitFails.mat'
+    filename_fail = './tests/test_data/NeurokitFails.mat'
     diagnosis_fail, explanation_fail = api.diagnose_with_STEMI(get_ecg_signal(filename_fail), sampling_rate)
     assert diagnosis_fail == Diagnosis.Failed, "Failed to handle an error during diagnostics"
     expected_explanation_fail = "Failed to diagnose due to an internal error"
@@ -100,8 +100,8 @@ def test_diagnose_with_STEMI():
 
 
 def test_diagnose_with_NN_test():
-    filename_not_ber = './ECG/tests/test_data/NotBER.mat'
-    filename_er = './ECG/tests/test_data/BER.mat'
+    filename_not_ber = './tests/test_data/NotBER.mat'
+    filename_er = './tests/test_data/BER.mat'
     signal_not_ber = get_ecg_signal(filename_not_ber)
     signal_er = get_ecg_signal(filename_er)
 
