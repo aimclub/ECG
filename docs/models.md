@@ -12,7 +12,7 @@ The final step is signal extraction - the list of all connected pixels of the si
 ## Check ST elevation
 The ST segment elevation in lead V3 (STE60) in millivolts is compared to the threshold from medical practice (0.2 mV) [1]. If the ST elevation value exceeds the threshold, it is considered significant. The distribution of normal and elevated ST recordings from the 'China Physiological Signal Challenge 2018' [2] dataset are shown in the normalized density histogram below.
 
-![ste_histogram](https://user-images.githubusercontent.com/28919867/171233344-cd183b1c-09e6-4018-b8ea-1f4eba89a234.png)
+![ste_histogram](ST-elevation-threshold.png)
 
 ST elevation is measured from the P-wave offset point at 60 ms after the J point (QRS offset). ECG features are detected using the Neurokit2 library [3].
 
