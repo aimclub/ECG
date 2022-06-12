@@ -5,7 +5,7 @@ from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose,
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers
 from ECG.digitization.preprocessing import image_rotation, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
-from ECG.NN_based_approach.pipeline import diagnose_BER, diagnose_STE, diagnose_MI, make_diagnose
+from ECG.NN_based_approach.pipeline import diagnose_BER, diagnose_STE, diagnose_MI
 
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
