@@ -100,11 +100,11 @@ def test_diagnose_with_STEMI():
 
 
 def test_diagnose_with_NN_test():
-    filename_not_ber = './test_data/NotBER.mat'
-    filename_er = './test_data/BER.mat'
-    filename_mi = './test_data/MI.mat'
-    filename_ste = './test_data/STE.mat'
-    filename_normal = './test_data/NORMAL.mat'
+    filename_not_ber = './tests/test_data/NotBER.mat'
+    filename_er = './tests/test_data/BER.mat'
+    filename_mi = './tests/test_data/MI.mat'
+    filename_ste = './tests/test_data/STE.mat'
+    filename_normal = './tests/test_data/NORMAL.mat'
 
     signal_not_ber = get_ecg_signal(filename_not_ber)
     signal_er = get_ecg_signal(filename_er)
