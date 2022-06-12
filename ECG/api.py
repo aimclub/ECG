@@ -5,7 +5,7 @@ from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose,
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers
 from ECG.digitization.preprocessing import image_rotation, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
-from ECG.NN_based_approach.pipeline import diagnose_BER, diagnose_STE, diagnose_MI
+from ECG.NN_based_approach.pipeline import diagnose_BER, diagnose_STE, diagnose_MI, make_diagnose
 
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
@@ -68,13 +68,13 @@ def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int, tuned: bool = Fa
     return (diagnosis_enum, explanation)
 
 
-def diagnose_BER_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+def diagnose_early_repolarization(signal: np.ndarray) -> Tuple[Diagnosis, str]:
     return diagnose_BER(signal)
 
 
-def diagnose_MI_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+def diagnose_miocardic_infarction(signal: np.ndarray) -> Tuple[Diagnosis, str]:
     return diagnose_MI(signal)
 
 
-def diagnose_STE_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+def diagnose_ST_elevation(signal: np.ndarray) -> Tuple[Diagnosis, str]:
     return diagnose_STE(signal)
