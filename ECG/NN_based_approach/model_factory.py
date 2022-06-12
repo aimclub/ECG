@@ -6,7 +6,7 @@ import torch.nn as nn
 
 def create_model(net_type: NetworkType, model_type: ModelType, input_shape=(12, 5000)) -> nn:
     device = torch.device('cpu')
-    model_dir = '../ECG/NN_based_approach/Models/'
+    model_dir = './ECG/NN_based_approach/Models/'
 
     if net_type == NetworkType.Conv:
         net = ConvNet(n_classes=1, input_shape=input_shape)
