@@ -5,8 +5,8 @@ from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose,
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers
 from ECG.digitization.preprocessing import image_rotation, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
-from ECG.NN_based_approach.pipeline import process_recording, create_model
-from ECG.NN_based_approach.NNType import NNType
+from ECG.NN_based_approach.pipeline import diagnose_BER, diagnose_STE, diagnose_MI
+
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
     image = np.asarray(image)
@@ -68,9 +68,13 @@ def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int, tuned: bool = Fa
     return (diagnosis_enum, explanation)
 
 
-def diagnose_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
-    net = create_model(net_type=NNType.Conv)
-    result = process_recording(signal, net=net)
-    diagnosis = Diagnosis.BER if result > 0.7 else Diagnosis.Unknown
-    explanation = 'Neutal Network calculated: the probability of BER is ' + str(result)
-    return (diagnosis, explanation)
+def diagnose_BER_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+    return diagnose_BER(signal)
+
+
+def diagnose_MI_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+    return diagnose_MI(signal)
+
+
+def diagnose_STE_with_NN(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+    return diagnose_STE(signal)

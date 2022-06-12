@@ -100,13 +100,21 @@ def test_diagnose_with_STEMI():
 
 
 def test_diagnose_with_NN_test():
-    filename_not_ber = './tests/test_data/NotBER.mat'
-    filename_er = './tests/test_data/BER.mat'
+    filename_not_ber = 'test_data/NotBER.mat'
+    filename_er = 'test_data/BER.mat'
+    filename_mi = 'test_data/MI.mat'
+    filename_ste = 'test_data/STE.mat'
+    filename_normal = 'test_data/NORMAL.mat'
+
     signal_not_ber = get_ecg_signal(filename_not_ber)
     signal_er = get_ecg_signal(filename_er)
+    signal_mi = get_ecg_signal(filename_mi)
+    signal_ste = get_ecg_signal(filename_ste)
+    signal_normal = get_ecg_signal(filename_normal)
 
-    ber_positive = api.diagnose_with_NN(signal_er)
-    ber_negative = api.diagnose_with_NN(signal_not_ber)
+    # BER
+    ber_positive = api.diagnose_BER_with_NN(signal_er)
+    ber_negative = api.diagnose_BER_with_NN(signal_not_ber)
 
     assert ber_positive[0] == Diagnosis.BER, "Failed to recognize BER"
     expected_explanation = "Neutal Network calculated: the probability of BER is 0.8727"
@@ -115,3 +123,27 @@ def test_diagnose_with_NN_test():
     assert ber_negative[0] == Diagnosis.Unknown, f"Wrong explanation\n\tGot {ber_negative[0]}"
     expected_explanation = "Neutal Network calculated: the probability of BER is 0.5973"
     assert ber_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {ber_negative[1]}"
+
+    # MI
+    mi_positive = api.diagnose_MI_with_NN(signal_mi)
+    mi_negative = api.diagnose_MI_with_NN(signal_er)
+
+    assert mi_positive[0] == Diagnosis.MI, "Failed to recognize MI"
+    expected_explanation = "Neutal Network calculated: the probability of MI is 0.9953"
+    assert mi_positive[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {mi_positive[1]}"
+
+    assert mi_negative[0] == Diagnosis.Unknown, f"Wrong explanation\n\tGot {mi_negative[0]}"
+    expected_explanation = "Neutal Network calculated: the probability of MI is 0.0197"
+    assert mi_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {mi_negative[1]}"
+
+    # STE
+    ste_positive = api.diagnose_STE_with_NN(signal_ste)
+    ste_negative = api.diagnose_STE_with_NN(signal_normal)
+
+    assert ste_positive[0] == Diagnosis.STE, "Failed to recognize STE"
+    expected_explanation = "Neutal Network calculated: the probability of STE is 0.6342"
+    assert ste_positive[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {ste_positive[1]}"
+
+    assert ste_negative[0] == Diagnosis.Unknown, f"Wrong explanation\n\tGot {ste_negative[0]}"
+    expected_explanation = "Neutal Network calculated: the probability of STE is 0.489"
+    assert ste_negative[1] == expected_explanation, f"Wrong explanation: \n\tExpected {expected_explanation} \n\tGot {ste_negative[1]}"

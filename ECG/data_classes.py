@@ -2,6 +2,7 @@ from enum import Enum
 from dataclasses import dataclass
 
 class Diagnosis(Enum):
+    STE = 'ST Elevation'
     MI = 'Myocardial Infarction'
     BER = 'Benign Early Repolarization'
     Unknown = 'Unknown Diagnosis'
