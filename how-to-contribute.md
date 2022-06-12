@@ -10,4 +10,4 @@
     * [How to cite](how-to-cite.md)
     * [Contact us](contact.md)
 
-TBD
+The contribution guide is available in the [repository](https://github.com/tanyapole/ECG/blob/main/docs/contribution.md).
