@@ -73,85 +73,38 @@ If your contribution changes ECG in any way:
    so all of your changes are reflected there.
 
 -  Update the
-   `README (https://github.com/tanyapole/ECG/blob/master/README.md)
+   [README](https://github.com/tanyapole/ECG/blob/master/README.md)
    if anything there has changed.
 
 If your contribution involves any code changes:
 
--  Update the `project unit
-   tests (https://github.com/tanyapole/ECG/tree/master/test) to
-   test your code changes.
+-  Update the [project unit tests](https://github.com/tanyapole/ECG/tree/master/tests) to test your code changes.
 
--  Make sure that your code is properly commented with
-   `docstrings (https://www.python.org/dev/peps/pep-0257/) and
-   comments explaining your rationale behind non-obvious coding
-   practices.
+-  Make sure that your code is properly commented with [docstrings](https://www.python.org/dev/peps/pep-0257/) and comments explaining your rationale behind non-obvious coding practices.
 
 If your contribution requires a new library dependency:
 
 -  Double-check that the new dependency is easy to install via ``pip``
-   or Anaconda and supports Python 3. If the dependency requires a
+   or Anaconda and supports Python 3.7. If the dependency requires a
    complicated installation, then we most likely won't merge your
-   changes because we want to keep FEDOT easy to install.
+   changes because we want to keep ECG library easy to install.
 
--  Add the required version of the library to
-   `requirements.txt (https://github.com/tanyapole/ECG/blob/master/requirements.txt)
+-  Add the required version of the library to [requirements.txt](https://github.com/tanyapole/ECG/blob/master/requirements.txt)
 
 Contribute to the documentation
 -------------------------------
 Take care of the documentation.
 
-All the documentation is created with the Sphinx autodoc feature. Use ..
-automodule:: <module_name> section which describes all the code in the module.
-
--  If a new package with several scripts:
-
-   1. Go to `docs/source/api (https://github.com/tanyapole/ECG/tree/master/docs/source/api) and create new your_name_for_file.rst file.
-
-   2. Add a Header underlined with “=” sign. It’s crucial.
-
-   3. Add automodule description for each of your scripts. ::
-
-       .. automodule:: fedot.core.your.first.script.path
-          :members:
-          :undoc-members:
-          :show-inheritance:
-
-       .. automodule:: fedot.core.your.second.script.path
-          :members:
-          :undoc-members:
-          :show-inheritance:
-       ...
-
-   4. Add your_name_for_file to the toctree at docs/source/api/index.rst
-
--  If a new module to the existed package:
-
-    Most of the sections are already described in `docs/source/api (https://github.com/tanyapole/ECG/tree/master/docs/source/api) , so you can:
-
-   -  choose the most appropriate and repeat 3-d step from the previous section.
-   -  or create a new one and repeat 2-3 steps from the previous section.
-
--  If a new function or a class to the existing module:
-
-    Be happy. Everything is already done for you.
+TBD
 
 After submitting your pull request
 ----------------------------------
 
-After submitting your pull request,
-`Travis-CI (https://travis-ci.com/) will automatically run unit tests
-on your changes and make sure that your updated code builds and runs on
-Python 3. We also use services that automatically check code quality and
-test coverage.
+Pull requests into `main` branch are required to pass status checks that are automatically run with a Github Actions action, that builds the project and runs tests.
 
-Check back shortly after submitting your pull request to make sure that
-your code passes these checks. If any of the checks come back with a red
-X, then do your best to address the errors.
+Ensure that your pull request passes status checks before submitting it for a review.
 
 Acknowledgements
 ----------------
 
-This document guide is based at well-written `TPOT Framework
-contribution
-guide (https://github.com/EpistasisLab/tpot/blob/master/docs_sources/contributing.md).
+This document guide is based at well-written [FEDOT Framework contribution guide](https://github.com/nccr-itmo/FEDOT/blob/master/docs/source/contribution.rst).
