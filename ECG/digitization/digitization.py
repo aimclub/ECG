@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 from scipy import signal
+import PIL
+from PIL import Image
 
 
 def find_interval(gap: np.ndarray) -> float:
@@ -17,13 +19,33 @@ def find_interval(gap: np.ndarray) -> float:
 	return np.mean(result)
 
 
+def resize_pic(image: np.ndarray) -> np.ndarray:
+	image = Image.fromarray(image.astype('uint8'), 'RGB')
+	resize_coef = 2000 / image.size[0]
+	pic_h = int(image.size[1] * resize_coef)
+	resized_im = image.resize((2000, pic_h), PIL.Image.NEAREST)
+	resized_im = np.asarray(resized_im)
+
+	return resized_im
+
+
 def grid_detection(image: np.ndarray) -> float:
 	assert image is not None
 
-	grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	blur = cv2.GaussianBlur(grayscale, (3, 3), 0)
-	grid = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, 6)
-	grid = cv2.medianBlur(grid, 3)
+	if image.shape[1] < 2000:
+		img_w = image.shape[1]
+		kf = int(np.ceil(img_w * 15 / 2000))
+		kernel_size = kf + 1 if kf % 2 == 0 else kf
+		c_kf = int(np.ceil(img_w * 6 / 2000))
+		grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		blur = cv2.GaussianBlur(grayscale, (3, 3), 0)
+		grid = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, kernel_size, c_kf)
+	else:
+		image = resize_pic(image)
+		grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		blur = cv2.GaussianBlur(grayscale, (3, 3), 0)
+		grid = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, 6)
+		grid = cv2.medianBlur(grid, 3)
 	
 	intervals = []
 	for n_row, row in enumerate(grid):
