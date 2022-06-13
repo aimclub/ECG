@@ -22,8 +22,9 @@ def grid_detection(image: np.ndarray) -> float:
 
 	grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	blur = cv2.GaussianBlur(grayscale, (3, 3), 0)
-	grid = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 3, 1)
-
+	grid = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, 6)
+	grid = cv2.medianBlur(grid, 3)
+	
 	intervals = []
 	for n_row, row in enumerate(grid):
 		for n_col, col in enumerate(row):

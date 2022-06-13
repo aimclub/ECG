@@ -3,16 +3,16 @@ import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers
-from ECG.digitization.preprocessing import image_rotation, binarization
+from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 from ECG.NN_based_approach.pipeline import process_recording, create_model
 from ECG.NN_based_approach.NNType import NNType
 
 def convert_image_to_signal(image: Image.Image) -> np.ndarray:
     image = np.asarray(image)
-    rotated_image = image_rotation(image)
-    scale = grid_detection(rotated_image)
-    binary_image = binarization(rotated_image)
+    adjusted_image = adjust_image(image)
+    scale = grid_detection(adjusted_image)
+    binary_image = binarization(adjusted_image)
     ecg_signal = signal_extraction(binary_image, scale)
 
     return ecg_signal 
