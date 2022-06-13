@@ -1,13 +1,15 @@
 # Description of Models and Algorithms
 
 ## Convert images to signal
-First step is preprocessing. An image is auto-rotated so that grid lines are orthogonal to the edges of the image. The algorithm searches for all lines in the image and calculates the angle of their inclination to rotate the picture. Then the RGB-format image is converted to grayscale for further work.
+First step is preprocessing: an image is auto-rotated so that grid lines are orthogonal to the edges of the image, adjusted with brightness and contrast equalization. After this, all shadows are removed. Then the RGB-format image is converted to grayscale for further work.
 
 Second step is grid detection. Image is binarized and grid lines are separated from the signal using adaptive thresholding. After that, the algorithm evaluates the scale with the pixel-counting approach - calculating all spacings between grid lines. The scale is used to convert the signal from units of pixels to millimeters.
 
 Third step is signal detection. The grayscale image is binarized using adaptive thresholding with Otsu's method. Then the binarized image is filtered with the median filter to remove noise (separate located pixels).
 
 The final step is signal extraction - the list of all connected pixels of the signal is converted to the 1D array where pixels are scaled and represent amplitudes of the signal. 
+
+The method is evaluated by calculating the average deviation between samples of the original and converted signals: images with daylight - 0.18mV, images with electric light - 0.18mV, images with bad lighting - 0.14mV. 
 
 ## Check ST elevation
 The ST segment elevation in lead V3 (STE60) in millivolts is compared to the threshold from medical practice (0.2 mV) [1]. If the ST elevation value exceeds the threshold, it is considered significant. The distribution of normal and elevated ST recordings from the 'China Physiological Signal Challenge 2018' [2] dataset are shown in the normalized density histogram below.
