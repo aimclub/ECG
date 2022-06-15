@@ -49,7 +49,7 @@ A Time-Domain Morphology and Gradient based algorithm for ECG feature extraction
 ## Differensial diagnostics by risk markers
 Diagnostic is performed via the modified criterion formula [1]. In the original paper if the value of the equation ([1.196 * ST segment elevation 60 ms after the J point in lead V3 in mm] + [0.059 * QTc in ms] – [0.326 * R-wave amplitude in lead V4 in mm]) is greater than 23.4 the diagnosis is STEMI and if less than or equal to 23.4, the diagnosis is early repolarization.
 
-The original formula was modified by adding a maximal R-peak amplitude parameter and the coefficient values were optimized by a logistic regression model with SGD learning. The original criterion formula has shown the balanced accuracy score of 0.66 on our data, whereas the modified formula has shown the balanced accuracy score of 0.78.
+The original formula was modified by adding a maximal R-peak amplitude parameter and the coefficient values were optimized by a logistic regression model with SGD learning. The original criterion formula has shown the balanced accuracy score of 0.73 on our data, whereas the modified formula has shown the balanced accuracy score of 0.82.
 
 The modified formula is as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) >= 126.9
 
