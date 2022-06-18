@@ -8,7 +8,6 @@ from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
 
 
-
 ###################
 ## convert image ##
 ###################
