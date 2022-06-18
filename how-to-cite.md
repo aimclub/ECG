@@ -10,4 +10,4 @@
     * [How to cite](how-to-cite.md)
     * [Contact us](contact.md)
 
-TBD
+Information will be provided after publication acceptance
