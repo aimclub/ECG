@@ -25,7 +25,8 @@ def image_rotation(image: np.ndarray, angle: int = None) -> np.ndarray:
     return img_rotated
 
 
-def automatic_brightness_and_contrast(image: np.ndarray, clip_hist_percent: int = 1) -> np.ndarray:
+def automatic_brightness_and_contrast(image: np.ndarray,
+                                      clip_hist_percent: int = 1) -> np.ndarray:
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
     hist_size = len(hist)
@@ -101,7 +102,8 @@ def adjust_image(image: np.ndarray) -> np.ndarray:
     return rotated_image
 
 
-def binarization(image: np.ndarray, threshold: float = None, inverse: bool = True) -> np.ndarray:
+def binarization(image: np.ndarray, threshold: float = None,
+                 inverse: bool = True) -> np.ndarray:
     assert image is not None
 
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

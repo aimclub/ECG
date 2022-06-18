@@ -6,11 +6,11 @@ class ConvNet(nn.Module):
     def __init__(self, input_shape=(12, 5000), n_classes=12):
         super(ConvNet, self).__init__()
         '''
-        This is basic convolutional neural network that is usually applied to computer vision tasks,
-        but can be applied also in the sequence data analysis. In this neural network is also used
-        residual connection to improve results.
+        This is basic convolutional neural network applied to the sequence data analysis.
+        Residual connections were added to the neural network to improve results.
         Parameters:
-        -input shape - tuple (embedding size, sequence length). For ECG embedding size is number of predictors
+        -input shape - tuple (embedding size, sequence length).
+            For ECG embedding size is number of predictors
         -n_classes - the number of classes that neural network fit to predict.
         '''
         # self.pos_enc = PositionalEncoder(input_shape[0], input_shape[1])
@@ -31,16 +31,28 @@ class ConvNet(nn.Module):
         )
         out_shape = shape_change_conv(out_shape, kernel_size=(7, 101),
                                       padding=(3, 30), stride=(2, 4))
-        self.conv2 = make_standard_double_layer(in_ch=conv_ch, out_ch=conv_ch, kernel_size=(5, 51),
-                                                padding=(2, 25), stride=(1, 2), dropout_coef=dropout_coef)
+        self.conv2 = make_standard_double_layer(in_ch=conv_ch,
+                                                out_ch=conv_ch,
+                                                kernel_size=(5, 51),
+                                                padding=(2, 25),
+                                                stride=(1, 2),
+                                                dropout_coef=dropout_coef)
         out_shape = shape_change_conv(out_shape, kernel_size=(5, 51),
                                       padding=(2, 25), stride=(1, 2))
-        self.conv3 = make_standard_double_layer(in_ch=conv_ch * 2, out_ch=conv_ch * 2, kernel_size=(3, 21),
-                                                padding=(1, 10), stride=(1, 2), dropout_coef=dropout_coef)
+        self.conv3 = make_standard_double_layer(in_ch=conv_ch * 2,
+                                                out_ch=conv_ch * 2,
+                                                kernel_size=(3, 21),
+                                                padding=(1, 10),
+                                                stride=(1, 2),
+                                                dropout_coef=dropout_coef)
         out_shape = shape_change_conv(out_shape, kernel_size=(3, 21),
                                       padding=(1, 10), stride=(1, 2))
-        self.conv4 = make_standard_double_layer(in_ch=conv_ch * 4, out_ch=conv_ch * 4, kernel_size=(1, 11),
-                                                padding=(0, 5), stride=(1, 1), dropout_coef=dropout_coef)
+        self.conv4 = make_standard_double_layer(in_ch=conv_ch * 4,
+                                                out_ch=conv_ch * 4,
+                                                kernel_size=(1, 11),
+                                                padding=(0, 5),
+                                                stride=(1, 1),
+                                                dropout_coef=dropout_coef)
         out_shape = shape_change_conv(out_shape, kernel_size=(3, 21),
                                       padding=(1, 10), stride=(1, 1))
 
@@ -70,11 +82,11 @@ class ConvNet1(nn.Module):
     def __init__(self, input_shape=(12, 5000), n_classes=1):
         super(ConvNet1, self).__init__()
         '''
-        This is basic convolutional neural network that is usually applied to computer vision tasks,
-        but can be applied also in the sequence data analysis. In this neural network is also used
-        residual connection to improve results.
+        This is basic convolutional neural network applied to the sequence data analysis.
+        Residual connections were added to the neural network to improve results.
         Parameters:
-        -input shape - tuple (embedding size, sequence length). For ECG embedding size is number of predictors
+        -input shape - tuple (embedding size, sequence length).
+            For ECG embedding size is number of predictors
         -n_classes - the number of classes that neural network fit to predict.
         '''
         # self.pos_enc = PositionalEncoder(input_shape[0], input_shape[1])
@@ -113,8 +125,8 @@ class ConvNet1(nn.Module):
 
         self.conv3 = nn.Sequential(
             nn.Dropout(dropout_coef),
-            nn.Conv2d(in_channels=conv_ch * 2, out_channels=conv_ch * 4, kernel_size=(3, 11),
-                      padding=(1, 5), stride=(1, 4)),
+            nn.Conv2d(in_channels=conv_ch * 2, out_channels=conv_ch * 4,
+                      kernel_size=(3, 11), padding=(1, 5), stride=(1, 4)),
             nn.BatchNorm2d(conv_ch * 4),
             nn.LeakyReLU(0.1),
             nn.MaxPool2d(kernel_size=3, padding=1, stride=1)
@@ -126,8 +138,8 @@ class ConvNet1(nn.Module):
 
         self.conv4 = nn.Sequential(
             nn.Dropout(dropout_coef),
-            nn.Conv2d(in_channels=conv_ch * 4, out_channels=conv_ch * 8, kernel_size=(1, 11),
-                      padding=(0, 5), stride=(1, 4)),
+            nn.Conv2d(in_channels=conv_ch * 4, out_channels=conv_ch * 8,
+                      kernel_size=(1, 11), padding=(0, 5), stride=(1, 4)),
             nn.BatchNorm2d(conv_ch * 8),
             nn.LeakyReLU(0.1),
             nn.MaxPool2d(kernel_size=3, padding=1, stride=1)

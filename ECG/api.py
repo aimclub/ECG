@@ -2,7 +2,8 @@ from PIL import Image
 import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
-from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, TextExplanation, TextAndImageExplanation
+from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
+    TextExplanation, TextAndImageExplanation
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
@@ -28,7 +29,8 @@ def convert_image_to_signal(image: Image.Image) -> np.ndarray or Failed:
 ## ST-elevation ###
 ###################
 
-def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[ElevatedST, TextExplanation] or Failed:
+def check_ST_elevation(signal: np.ndarray, sampling_rate: int)\
+        -> Tuple[ElevatedST, TextExplanation] or Failed:
     elevation_threshold = 0.2
 
     try:
@@ -37,15 +39,17 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
 
         ste_assessment = ElevatedST.Present if ste_bool else ElevatedST.Abscent
 
-        explanation = 'ST elevation value in lead V3 (' + str(ste_mV) + ' mV)' + (' did not exceed ', ' exceeded ')[ste_bool] + \
-            'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + \
-            (' not detected.', ' detected.')[ste_bool]
+        explanation = 'ST elevation value in lead V3 (' + str(ste_mV) + ' mV)' \
+            + (' did not exceed ', ' exceeded ')[ste_bool] + \
+            'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was'\
+            + (' not detected.', ' detected.')[ste_bool]
         return (ste_assessment, TextExplanation(content=explanation))
     except Exception:
         return Failed(reason='Failed to assess ST elevation due to an internal error')
 
 
-def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExplanation] or Failed:
+def check_ST_elevation_with_NN(signal: np.ndarray)\
+        -> Tuple[ElevatedST, TextExplanation] or Failed:
     try:
         res, prob, gradcam = NN_pipeline.check_STE(signal)
         text_explanation = f'Significant ST elevation probability is {round(prob, 4)}'
@@ -58,7 +62,8 @@ def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExpl
 ## risk markers ###
 ###################
 
-def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers or Failed:
+def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int)\
+        -> RiskMarkers or Failed:
     try:
         return detect_risk_markers(signal, sampling_rate)
     except Exception:
@@ -69,7 +74,10 @@ def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers
 ## diagnose #######
 ###################
 
-def diagnose_with_risk_markers(signal: np.ndarray, sampling_rate: int, tuned: bool = False) -> Tuple[Diagnosis, TextExplanation] or Failed:
+def diagnose_with_risk_markers(signal: np.ndarray,
+                               sampling_rate: int,
+                               tuned: bool = False)\
+        -> Tuple[Diagnosis, TextExplanation] or Failed:
     try:
         risk_markers = evaluate_risk_markers(signal, sampling_rate)
 
@@ -77,22 +85,26 @@ def diagnose_with_risk_markers(signal: np.ndarray, sampling_rate: int, tuned: bo
         diagnosis_enum = Diagnosis.MI if stemi_diagnosis else Diagnosis.BER
 
         if tuned:
-            formula = '(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) + (-1.7 * np.minimum([RA V4 in mm], 19)) = '
+            formula = '(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) "\
+                + "+ (-1.7 * np.minimum([RA V4 in mm], 19)) = '
             threshold = '126.9'
         else:
-            formula = '(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) – (0.326 * [RA V4 in mm])) = '
+            formula = '(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) "\
+                + "– (0.326 * [RA V4 in mm])) = '
             threshold = '23.4'
 
         explanation = 'Criterion value calculated as follows: ' + \
             formula + str(stemi_criterion) + \
             (' did not exceed ', ' exceeded ')[stemi_diagnosis] + \
-            'the threshold ' + threshold + ', therefore the diagnosis is ' + diagnosis_enum.value
+            'the threshold ' + threshold + ', therefore the diagnosis is ' + \
+            diagnosis_enum.value
         return (diagnosis_enum, TextExplanation(content=explanation))
     except Exception:
         return Failed(reason='Failed to diagnose due to an internal error')
 
 
-def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextAndImageExplanation] or Failed:
+def check_BER_with_NN(signal: np.ndarray)\
+        -> Tuple[bool, TextAndImageExplanation] or Failed:
     try:
         res, prob, gradcam = NN_pipeline.is_BER(signal)
         text_explanation = f'BER probability is {round(prob, 4)}'

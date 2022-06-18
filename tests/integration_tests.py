@@ -1,8 +1,10 @@
 import numpy as np
 import ECG.api as api
 from PIL import Image
-from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers, TextExplanation, TextAndImageExplanation
-from tests.test_util import get_ecg_signal, get_ecg_array, open_image, check_data_type, compare_values
+from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
+    TextExplanation, TextAndImageExplanation
+from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
+    check_data_type, compare_values
 from typing import Tuple
 
 
@@ -43,7 +45,8 @@ def test_convert_image_to_signal():
     result = api.convert_image_to_signal(image)
     max_diff = np.abs(groundtruth - result).max()
 
-    assert max_diff < 1e-14, f'Recognized signal does not match the groundtruth. Max difference is {max_diff}'
+    assert max_diff < 1e-14, f'Recognized signal does not match the groundtruth."\
+        + "Max difference is {max_diff}'
 
 
 ###################
@@ -58,8 +61,8 @@ def test_check_ST_elevation():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Present,
                    "Failed to detect significant ST elevation")
-    gt_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded the threshold 0.2," \
-        + " therefore ST elevation was detected."
+    gt_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded"\
+        + "the threshold 0.2, therefore ST elevation was detected."
     check_text_explanation(result[1], gt_explanation)
 
 
@@ -124,7 +127,8 @@ def test_diagnose_with_risk_markers_MI():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], Diagnosis.MI, "Failed to recognize MI")
-    gt_explanation = "Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms])"\
+    gt_explanation = "Criterion value calculated as follows: "\
+        + "(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms])"\
         + " – (0.326 * [RA V4 in mm])) = 31.2231 exceeded the threshold 23.4,"\
         + " therefore the diagnosis is Myocardial Infarction"
     check_text_explanation(result[1], gt_explanation)
@@ -138,8 +142,10 @@ def test_diagnose_with_risk_markers_MI_tuned():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], Diagnosis.MI, "Failed to recognize MI")
     check_data_type(result[1], TextExplanation)
-    gt_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
-        + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 151.47 exceeded the threshold 126.9,"\
+    gt_explanation = "Criterion value calculated as follows: "\
+        + "(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
+        + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 151.47 "\
+        + "exceeded the threshold 126.9,"\
         + " therefore the diagnosis is Myocardial Infarction"
     check_text_explanation(result[1], gt_explanation)
 
@@ -151,8 +157,10 @@ def test_diagnose_with_risk_markers_BER_tuned():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], Diagnosis.BER, "Failed to recognize BER")
-    gt_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
-        + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 118.4062869471591 did not exceed the threshold 126.9,"\
+    gt_explanation = "Criterion value calculated as follows: "\
+        + "(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
+        + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 118.4062869471591"\
+        + " did not exceed the threshold 126.9,"\
         + " therefore the diagnosis is Benign Early Repolarization"
     check_text_explanation(result[1], gt_explanation)
 

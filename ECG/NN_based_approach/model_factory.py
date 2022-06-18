@@ -4,7 +4,8 @@ import torch
 import torch.nn as nn
 
 
-def create_model(net_type: NetworkType, model_type: ModelType, input_shape=(12, 5000)) -> nn:
+def create_model(net_type: NetworkType, model_type: ModelType, input_shape=(12, 5000))\
+        -> nn.Module:
     device = torch.device('cpu')
     model_dir = './ECG/NN_based_approach/Models/'
 

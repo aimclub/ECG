@@ -26,10 +26,11 @@ def open_image(path):
 
 
 def check_data_type(object, expected_type):
-    assert isinstance(
-        object, expected_type), f"Wrong data type: expected {expected_type}, got {type(object)}"
+    assert isinstance(object, expected_type), \
+        f"Wrong data type: expected {expected_type}, got {type(object)}"
 
 
 def compare_values(value, groundtruth, message, multiline=False):
     sep = '\n\t' if multiline else ''
-    assert groundtruth == value, f'{message}. {sep}Expected {groundtruth}. {sep}Got {value}.'
+    assert groundtruth == value, \
+        f'{message}. {sep}Expected {groundtruth}. {sep}Got {value}.'

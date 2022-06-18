@@ -3,7 +3,8 @@ from ECG.criterion_based_approach.ecg_features import get_ecg_parameters
 from ECG.criterion_based_approach.qtc import get_median_qt, get_qtc
 from ECG.criterion_based_approach.r_amplitude import get_median_r_amplitude
 from ECG.criterion_based_approach.st_elevation import get_median_ste60
-from ECG.criterion_based_approach.criterion import calculate_stemi_criterion, get_stemi_diagnosis
+from ECG.criterion_based_approach.criterion import calculate_stemi_criterion, \
+    get_stemi_diagnosis
 from ECG.data_classes import RiskMarkers
 
 
