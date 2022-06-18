@@ -15,6 +15,7 @@ class ImageExplanation:
     content: Image.Image
 
 class Diagnosis(Enum):
+    STE = 'ST Elevation'
     MI = 'Myocardial Infarction'
     BER = 'Benign Early Repolarization'
 

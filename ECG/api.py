@@ -5,8 +5,7 @@ from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose,
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, TextExplanation, ImageExplanation
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
-from ECG.NN_based_approach.pipeline import process_recording, create_model
-from ECG.NN_based_approach.NNType import NNType
+import ECG.NN_based_approach.pipeline as NN_pipeline
 
 
 ###################
@@ -46,7 +45,11 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
         return Failed(reason='Failed to assess ST elevation due to an internal error')
 
 def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExplanation] or Failed:
-    raise NotImplementedError()
+    try:
+        ste_assessment, explanation = NN_pipeline.check_STE(signal)
+        return (ste_assessment, TextExplanation(content=explanation))
+    except:
+        return Failed(reason='Failed to assess ST elevation due to an internal error')
 
 
 ###################
@@ -89,13 +92,14 @@ def diagnose_with_risk_markers(signal: np.ndarray, sampling_rate: int, tuned: bo
 
 def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
     try:
-        net = create_model(net_type=NNType.Conv)
-        result = process_recording(signal, net=net)
-        diagnosis = result > 0.7
-        explanation = 'Neutal Network calculated: the probability of BER is ' + str(result)
-        return (diagnosis, TextExplanation(content=explanation))
+        is_BER, explanation = NN_pipeline.is_BER(signal)
+        return (is_BER, TextExplanation(content=explanation))
     except:
         return Failed(reason='Failed to check for BER due to an internal error')
 
-def check_IM_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
-    raise NotImplementedError()
+def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
+    try:
+        is_MI, explanation = NN_pipeline.is_MI(signal)
+        return (is_MI, TextExplanation(content=explanation))
+    except:
+        return Failed(reason='Failed to check for MI due to an internal error')

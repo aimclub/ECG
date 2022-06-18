@@ -9,6 +9,16 @@ def check_text_explanation(explanation, groundtruth_text):
     check_data_type(explanation, TextExplanation)
     compare_values(explanation.content, groundtruth_text, "Unexpected explanation", multiline=True)
 
+def _get_NN_test_data(option):
+    options = {
+        'ber': './tests/test_data/BER.mat',
+        'not_ber': './tests/test_data/NotBER.mat',
+        'mi': './tests/test_data/MI.mat',
+        'ste': './tests/test_data/STE.mat',
+        'normal': './tests/test_data/NORMAL.mat'
+    }
+    return options[option]
+
 
 ###################
 ## convert image ##
@@ -45,6 +55,26 @@ def test_check_ST_elevation_failure():
     filename = './tests/test_data/NeurokitFails.mat'
     result = api.check_ST_elevation(get_ecg_signal(filename), sampling_rate=500)
     check_data_type(result, Failed)
+
+def test_check_ST_elevation_with_NN_present():
+    filename = _get_NN_test_data('ste')
+    signal = get_ecg_signal(filename)
+    result = api.check_ST_elevation_with_NN(signal)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], ElevatedST.Present, "Failed to detect significant ST elevation")
+    gt_explanation = "Neutal Network calculated: the probability of significant ST elevation is 0.6342"
+    check_text_explanation(result[1], gt_explanation)
+
+def test_check_ST_elevation_with_NN_absent():
+    filename = _get_NN_test_data('normal')
+    signal = get_ecg_signal(filename)
+    result = api.check_ST_elevation_with_NN(signal)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], ElevatedST.Abscent, "Failed to detect absence significant ST elevation")
+    gt_explanation = "Neutal Network calculated: the probability of significant ST elevation is 0.489"
+    check_text_explanation(result[1], gt_explanation)
 
 
 ###################
@@ -108,7 +138,7 @@ def test_diagnose_with_risk_markers_BER_tuned():
     check_text_explanation(result[1], gt_explanation)
 
 def test_check_BER_with_NN_positive():
-    filename = './tests/test_data/BER.mat'
+    filename = _get_NN_test_data('ber')
     signal = get_ecg_signal(filename)
     result = api.check_BER_with_NN(signal)
     check_data_type(result, Tuple)
@@ -118,11 +148,31 @@ def test_check_BER_with_NN_positive():
     check_text_explanation(result[1], gt_explanation)
 
 def test_check_BER_with_NN_negative():
-    filename = './tests/test_data/NotBER.mat'
+    filename = _get_NN_test_data('not_ber')
     signal = get_ecg_signal(filename)
     result = api.check_BER_with_NN(signal)
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard BER")
     gt_explanation = "Neutal Network calculated: the probability of BER is 0.5973"
+    check_text_explanation(result[1], gt_explanation)
+
+def test_check_MI_with_NN_positive():
+    filename = _get_NN_test_data('mi')
+    signal = get_ecg_signal(filename)
+    result = api.check_MI_with_NN(signal)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], True, "Failed to recognize MI")
+    gt_explanation = "Neutal Network calculated: the probability of MI is 0.9953"
+    check_text_explanation(result[1], gt_explanation)
+
+def test_check_MI_with_NN_negative():
+    filename = _get_NN_test_data('ber')
+    signal = get_ecg_signal(filename)
+    result = api.check_MI_with_NN(signal)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], False, "Failed to discard MI")
+    gt_explanation = "Neutal Network calculated: the probability of MI is 0.0197"
     check_text_explanation(result[1], gt_explanation)
