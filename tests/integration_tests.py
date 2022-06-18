@@ -61,7 +61,7 @@ def test_check_ST_elevation():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Present,
                    "Failed to detect significant ST elevation")
-    gt_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded"\
+    gt_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded "\
         + "the threshold 0.2, therefore ST elevation was detected."
     check_text_explanation(result[1], gt_explanation)
 

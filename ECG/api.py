@@ -85,12 +85,12 @@ def diagnose_with_risk_markers(signal: np.ndarray,
         diagnosis_enum = Diagnosis.MI if stemi_diagnosis else Diagnosis.BER
 
         if tuned:
-            formula = '(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) "\
-                + "+ (-1.7 * np.minimum([RA V4 in mm], 19)) = '
+            formula = '(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms]) '\
+                + '+ (-1.7 * np.minimum([RA V4 in mm], 19)) = '
             threshold = '126.9'
         else:
-            formula = '(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) "\
-                + "– (0.326 * [RA V4 in mm])) = '
+            formula = '(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms]) '\
+                + '– (0.326 * [RA V4 in mm])) = '
             threshold = '23.4'
 
         explanation = 'Criterion value calculated as follows: ' + \
