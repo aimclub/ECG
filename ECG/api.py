@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
-from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, TextExplanation, ImageExplanation
+from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, TextExplanation, TextAndImageExplanation
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
@@ -46,8 +46,9 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
 
 def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExplanation] or Failed:
     try:
-        ste_assessment, explanation = NN_pipeline.check_STE(signal)
-        return (ste_assessment, TextExplanation(content=explanation))
+        res, prob, gradcam = NN_pipeline.check_STE(signal)
+        text_explanation = f'Significant ST elevation probability is {round(prob, 4)}'
+        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
     except:
         return Failed(reason='Failed to assess ST elevation due to an internal error')
 
@@ -90,16 +91,18 @@ def diagnose_with_risk_markers(signal: np.ndarray, sampling_rate: int, tuned: bo
         return Failed(reason='Failed to diagnose due to an internal error')
 
 
-def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
+def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextAndImageExplanation] or Failed:
     try:
-        is_BER, explanation = NN_pipeline.is_BER(signal)
-        return (is_BER, TextExplanation(content=explanation))
+        res, prob, gradcam = NN_pipeline.is_BER(signal)
+        text_explanation = f'BER probability is {round(prob, 4)}'
+        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
     except:
         return Failed(reason='Failed to check for BER due to an internal error')
 
 def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
     try:
-        is_MI, explanation = NN_pipeline.is_MI(signal)
-        return (is_MI, TextExplanation(content=explanation))
+        res, prob, gradcam = NN_pipeline.is_MI(signal)
+        text_explanation = f'MI probability is {round(prob, 4)}'
+        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
     except:
         return Failed(reason='Failed to check for MI due to an internal error')
