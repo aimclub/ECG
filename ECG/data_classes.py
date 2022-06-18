@@ -11,8 +11,9 @@ class TextExplanation:
     content: str
 
 @dataclass
-class ImageExplanation:
-    content: Image.Image
+class TextAndImageExplanation:
+    text: str
+    image: Image.Image
 
 class Diagnosis(Enum):
     STE = 'ST Elevation'

@@ -1,6 +1,7 @@
 import numpy as np
 import ECG.api as api
-from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers, TextExplanation
+from PIL import Image
+from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers, TextExplanation, TextAndImageExplanation
 from tests.test_util import get_ecg_signal, get_ecg_array, open_image, check_data_type, compare_values
 from typing import Tuple
 
@@ -8,6 +9,11 @@ from typing import Tuple
 def check_text_explanation(explanation, groundtruth_text):
     check_data_type(explanation, TextExplanation)
     compare_values(explanation.content, groundtruth_text, "Unexpected explanation", multiline=True)
+
+def check_text_image_explanation(explanation, groundtruth_text):
+    check_data_type(explanation, TextAndImageExplanation)
+    compare_values(explanation.text, groundtruth_text, "Unexpected explanation", multiline=True)
+    assert isinstance(explanation.image, Image.Image)
 
 def _get_NN_test_data(option):
     options = {
@@ -63,8 +69,8 @@ def test_check_ST_elevation_with_NN_present():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Present, "Failed to detect significant ST elevation")
-    gt_explanation = "Neutal Network calculated: the probability of significant ST elevation is 0.6342"
-    check_text_explanation(result[1], gt_explanation)
+    gt_explanation = "Significant ST elevation probability is 0.6342"
+    check_text_image_explanation(result[1], gt_explanation)
 
 def test_check_ST_elevation_with_NN_absent():
     filename = _get_NN_test_data('normal')
@@ -73,8 +79,8 @@ def test_check_ST_elevation_with_NN_absent():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Abscent, "Failed to detect absence significant ST elevation")
-    gt_explanation = "Neutal Network calculated: the probability of significant ST elevation is 0.489"
-    check_text_explanation(result[1], gt_explanation)
+    gt_explanation = "Significant ST elevation probability is 0.489"
+    check_text_image_explanation(result[1], gt_explanation)
 
 
 ###################
@@ -144,8 +150,8 @@ def test_check_BER_with_NN_positive():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to recognize BER")
-    gt_explanation = "Neutal Network calculated: the probability of BER is 0.8727"
-    check_text_explanation(result[1], gt_explanation)
+    gt_explanation = "BER probability is 0.8727"
+    check_text_image_explanation(result[1], gt_explanation)
 
 def test_check_BER_with_NN_negative():
     filename = _get_NN_test_data('not_ber')
@@ -154,8 +160,8 @@ def test_check_BER_with_NN_negative():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard BER")
-    gt_explanation = "Neutal Network calculated: the probability of BER is 0.5973"
-    check_text_explanation(result[1], gt_explanation)
+    gt_explanation = "BER probability is 0.5973"
+    check_text_image_explanation(result[1], gt_explanation)
 
 def test_check_MI_with_NN_positive():
     filename = _get_NN_test_data('mi')
@@ -164,8 +170,8 @@ def test_check_MI_with_NN_positive():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to recognize MI")
-    gt_explanation = "Neutal Network calculated: the probability of MI is 0.9953"
-    check_text_explanation(result[1], gt_explanation)
+    gt_explanation = "MI probability is 0.9953"
+    check_text_image_explanation(result[1], gt_explanation)
 
 def test_check_MI_with_NN_negative():
     filename = _get_NN_test_data('ber')
@@ -174,5 +180,5 @@ def test_check_MI_with_NN_negative():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard MI")
-    gt_explanation = "Neutal Network calculated: the probability of MI is 0.0197"
-    check_text_explanation(result[1], gt_explanation)
+    gt_explanation = "MI probability is 0.0197"
+    check_text_image_explanation(result[1], gt_explanation)
