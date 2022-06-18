@@ -18,7 +18,7 @@ def _preprocess(signal: np.ndarray) -> torch.Tensor:
 def _signal_to_img(signal: np.ndarray) -> np.ndarray:
     img = signal - signal.min()
     img = img / img.max()
-    return np.stack([img]*3, axis=-1)
+    return np.stack([img] * 3, axis=-1)
 
 
 def predict_and_explain(signal, net, cam):

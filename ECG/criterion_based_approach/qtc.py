@@ -58,7 +58,7 @@ def bazett(qt, rr):
     qt_sec = qt / 1000
     rr_sec = rr / 1000
 
-    return round(qt_sec / rr_sec ** (1/2) * 1000)
+    return round(qt_sec / rr_sec ** (1 / 2) * 1000)
 
 
 def get_qtc(median_qt, rr, sampling_rate):

@@ -9,12 +9,12 @@ def find_interval(gap: np.ndarray) -> float:
     result = []
     new_arr = gap[::-1]
     for n, ind in enumerate(new_arr):
-        if n == len(gap)-1:
+        if n == len(gap) - 1:
             break
-        elif (ind - new_arr[n+1]) < 2:
+        elif (ind - new_arr[n + 1]) < 2:
             continue
         else:
-            result.append(ind - new_arr[n+1])
+            result.append(ind - new_arr[n + 1])
 
     return np.mean(result)
 

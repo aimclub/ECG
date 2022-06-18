@@ -10,7 +10,7 @@ class ConvNet(nn.Module):
         but can be applied also in the sequence data analysis. In this neural network is also used
         residual connection to improve results.
         Parameters:
-        -input shape - tuple (embedding size, sequence length). For ECG embedding size is number of predictors 
+        -input shape - tuple (embedding size, sequence length). For ECG embedding size is number of predictors
         -n_classes - the number of classes that neural network fit to predict.
         '''
         # self.pos_enc = PositionalEncoder(input_shape[0], input_shape[1])
@@ -74,7 +74,7 @@ class ConvNet1(nn.Module):
         but can be applied also in the sequence data analysis. In this neural network is also used
         residual connection to improve results.
         Parameters:
-        -input shape - tuple (embedding size, sequence length). For ECG embedding size is number of predictors 
+        -input shape - tuple (embedding size, sequence length). For ECG embedding size is number of predictors
         -n_classes - the number of classes that neural network fit to predict.
         '''
         # self.pos_enc = PositionalEncoder(input_shape[0], input_shape[1])

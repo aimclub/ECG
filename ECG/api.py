@@ -20,7 +20,7 @@ def convert_image_to_signal(image: Image.Image) -> np.ndarray or Failed:
         binary_image = binarization(adjusted_image)
         ecg_signal = signal_extraction(binary_image, scale)
         return ecg_signal
-    except:
+    except Exception:
         return Failed(reason='Failed to convert image to signal due to an internal error')
 
 
@@ -41,7 +41,7 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
             'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + \
             (' not detected.', ' detected.')[ste_bool]
         return (ste_assessment, TextExplanation(content=explanation))
-    except:
+    except Exception:
         return Failed(reason='Failed to assess ST elevation due to an internal error')
 
 
@@ -50,7 +50,7 @@ def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExpl
         res, prob, gradcam = NN_pipeline.check_STE(signal)
         text_explanation = f'Significant ST elevation probability is {round(prob, 4)}'
         return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
-    except:
+    except Exception:
         return Failed(reason='Failed to assess ST elevation due to an internal error')
 
 
@@ -61,7 +61,7 @@ def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExpl
 def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers or Failed:
     try:
         return detect_risk_markers(signal, sampling_rate)
-    except:
+    except Exception:
         return Failed(reason='Failed to evaluate risk markers due to an internal error')
 
 
@@ -88,7 +88,7 @@ def diagnose_with_risk_markers(signal: np.ndarray, sampling_rate: int, tuned: bo
             (' did not exceed ', ' exceeded ')[stemi_diagnosis] + \
             'the threshold ' + threshold + ', therefore the diagnosis is ' + diagnosis_enum.value
         return (diagnosis_enum, TextExplanation(content=explanation))
-    except:
+    except Exception:
         return Failed(reason='Failed to diagnose due to an internal error')
 
 
@@ -97,7 +97,7 @@ def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextAndImageExplanation
         res, prob, gradcam = NN_pipeline.is_BER(signal)
         text_explanation = f'BER probability is {round(prob, 4)}'
         return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
-    except:
+    except Exception:
         return Failed(reason='Failed to check for BER due to an internal error')
 
 
@@ -106,5 +106,5 @@ def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Fail
         res, prob, gradcam = NN_pipeline.is_MI(signal)
         text_explanation = f'MI probability is {round(prob, 4)}'
         return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
-    except:
+    except Exception:
         return Failed(reason='Failed to check for MI due to an internal error')

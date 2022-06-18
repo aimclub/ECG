@@ -36,7 +36,7 @@ def automatic_brightness_and_contrast(image: np.ndarray, clip_hist_percent: int 
         accumulator.append(accumulator[index - 1] + float(hist[index]))
 
     maximum = accumulator[-1]
-    clip_hist_percent *= (maximum/100.0)
+    clip_hist_percent *= (maximum / 100.0)
     clip_hist_percent /= 2.0
 
     minimum_gray = 0
@@ -109,7 +109,7 @@ def binarization(image: np.ndarray, threshold: float = None, inverse: bool = Tru
     if threshold is None:
         if inverse:
             _, binaryData = cv2.threshold(
-                grayscale, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+                grayscale, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
         else:
             _, binaryData = cv2.threshold(grayscale, 0, 255, cv2.THRESH_OTSU)
     else:
