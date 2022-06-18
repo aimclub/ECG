@@ -2,22 +2,35 @@ from PIL import Image
 import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
-from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers
-from ECG.digitization.preprocessing import image_rotation, binarization
+from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, TextExplanation, ImageExplanation
+from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
-from ECG.NN_based_approach.pipeline import diagnose_BER, diagnose_STE, diagnose_MI
+import ECG.NN_based_approach.pipeline as NN_pipeline
 
 
-def convert_image_to_signal(image: Image.Image) -> np.ndarray:
-    image = np.asarray(image)
-    rotated_image = image_rotation(image)
-    scale = grid_detection(rotated_image)
-    binary_image = binarization(rotated_image)
-    ecg_signal = signal_extraction(binary_image, scale)
 
-    return ecg_signal 
+###################
+## convert image ##
+###################
 
-def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[ElevatedST, str]:
+def convert_image_to_signal(image: Image.Image) -> np.ndarray or Failed:
+    try:
+        image = np.asarray(image)
+        adjusted_image = adjust_image(image)
+        scale = grid_detection(adjusted_image)
+        binary_image = binarization(adjusted_image)
+        ecg_signal = signal_extraction(binary_image, scale)
+        return ecg_signal
+    except:
+        return Failed(reason='Failed to convert image to signal due to an internal error')
+
+
+
+###################
+## ST-elevation ###
+###################
+
+def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[ElevatedST, TextExplanation] or Failed:
     elevation_threshold = 0.2
 
     try:
@@ -28,26 +41,38 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
 
         explanation = 'ST elevation value in lead V3 (' + str(ste_mV) + ' mV)' + (' did not exceed ', ' exceeded ')[ste_bool] + \
             'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + (' not detected.', ' detected.')[ste_bool]
+        return (ste_assessment, TextExplanation(content=explanation))
     except:
-        ste_assessment = ElevatedST.Failed
-        explanation = 'Failed to assess ST elevation due to an internal error'
+        return Failed(reason='Failed to assess ST elevation due to an internal error')
 
-    return (ste_assessment, explanation)
+def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExplanation] or Failed:
+    try:
+        ste_assessment, explanation = NN_pipeline.check_STE(signal)
+        return (ste_assessment, TextExplanation(content=explanation))
+    except:
+        return Failed(reason='Failed to assess ST elevation due to an internal error')
 
 
-def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers or None:
+###################
+## risk markers ###
+###################
+
+def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int) -> RiskMarkers or Failed:
     try:
         return detect_risk_markers(signal, sampling_rate)
     except:
-        return None
+        return Failed(reason='Failed to evaluate risk markers due to an internal error')
 
 
-def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int, tuned: bool = False) -> Tuple[Diagnosis, str]:
-    risk_markers = evaluate_risk_markers(signal, sampling_rate)
+###################
+## diagnose #######
+###################
 
-    if risk_markers:
+def diagnose_with_risk_markers(signal: np.ndarray, sampling_rate: int, tuned: bool = False) -> Tuple[Diagnosis, TextExplanation] or Failed:
+    try:
+        risk_markers = evaluate_risk_markers(signal, sampling_rate)
+
         stemi_diagnosis, stemi_criterion = diagnose(risk_markers, tuned)
-
         diagnosis_enum = Diagnosis.MI if stemi_diagnosis else Diagnosis.BER
 
         if tuned:
@@ -61,20 +86,21 @@ def diagnose_with_STEMI(signal: np.ndarray, sampling_rate: int, tuned: bool = Fa
             formula + str(stemi_criterion) + \
             (' did not exceed ', ' exceeded ')[stemi_diagnosis] + \
             'the threshold ' + threshold + ', therefore the diagnosis is ' + diagnosis_enum.value
-    else:
-        diagnosis_enum = Diagnosis.Failed
-        explanation = 'Failed to diagnose due to an internal error'
-
-    return (diagnosis_enum, explanation)
+        return (diagnosis_enum, TextExplanation(content=explanation))
+    except:
+        return Failed(reason='Failed to diagnose due to an internal error')
 
 
-def diagnose_early_repolarization(signal: np.ndarray) -> Tuple[Diagnosis, str]:
-    return diagnose_BER(signal)
+def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
+    try:
+        is_BER, explanation = NN_pipeline.is_BER(signal)
+        return (is_BER, TextExplanation(content=explanation))
+    except:
+        return Failed(reason='Failed to check for BER due to an internal error')
 
-
-def diagnose_miocardic_infarction(signal: np.ndarray) -> Tuple[Diagnosis, str]:
-    return diagnose_MI(signal)
-
-
-def diagnose_ST_elevation(signal: np.ndarray) -> Tuple[Diagnosis, str]:
-    return diagnose_STE(signal)
+def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
+    try:
+        is_MI, explanation = NN_pipeline.is_MI(signal)
+        return (is_MI, TextExplanation(content=explanation))
+    except:
+        return Failed(reason='Failed to check for MI due to an internal error')

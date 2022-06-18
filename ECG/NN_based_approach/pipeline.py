@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from typing import Tuple
 from ECG.NN_based_approach.utils import signal_rescale
-from ECG.data_classes import Diagnosis
+from ECG.data_classes import ElevatedST
 from ECG.NN_based_approach.model_factory import create_model
 from ECG.NN_based_approach.NN_Enums import NetworkType, ModelType
 
@@ -15,28 +15,26 @@ def process_recording(signal: np.ndarray, net: nn.Module) -> np.double:
     return round(pred.cpu().detach().item(), 4)
 
 
-def diagnose_BER(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+def is_BER(signal: np.ndarray) -> Tuple[bool, str]:
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.BER)
     result = process_recording(signal, net=net)
-    diagnosis = Diagnosis.BER if result > 0.6 else Diagnosis.Unknown
     explanation = 'Neutal Network calculated: the probability of BER is ' + str(result)
-    return (diagnosis, explanation)
+    return (result > 0.6, explanation)
 
 
-def diagnose_MI(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+def is_MI(signal: np.ndarray) -> Tuple[bool, str]:
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.MI)
     result = process_recording(signal, net=net)
-    diagnosis = Diagnosis.MI if result > 0.6 else Diagnosis.Unknown
     explanation = 'Neutal Network calculated: the probability of MI is ' + str(result)
-    return (diagnosis, explanation)
+    return (result > 0.6, explanation)
 
 
-def diagnose_STE(signal: np.ndarray) -> Tuple[Diagnosis, str]:
+def check_STE(signal: np.ndarray) -> Tuple[ElevatedST, str]:
     signal = signal_rescale(signal, up_slice=4000)
     net = create_model(net_type=NetworkType.Conv1, model_type=ModelType.STE, input_shape=(12, 4000))
     result = process_recording(signal, net=net)
-    diagnosis = Diagnosis.STE if result > 0.6 else Diagnosis.Unknown
-    explanation = 'Neutal Network calculated: the probability of STE is ' + str(result)
-    return (diagnosis, explanation)
+    explanation = 'Neutal Network calculated: the probability of significant ST elevation is ' + str(result)
+    ste = ElevatedST.Present if result > 0.6 else ElevatedST.Abscent
+    return (ste, explanation)
