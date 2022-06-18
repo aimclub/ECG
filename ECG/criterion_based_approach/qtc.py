@@ -2,6 +2,7 @@ import numpy as np
 from ECG.criterion_based_approach.util import samples_to_ms
 from math import isnan, nan
 
+
 def get_intersection_for_descending_feature(ecg_cleaned, peaks, p_offsets, rr, segment_relative_length):
     segment_length = round(rr * segment_relative_length)
 
@@ -16,14 +17,16 @@ def get_intersection_for_descending_feature(ecg_cleaned, peaks, p_offsets, rr, s
             segment_start = int(min(peaks[i] + segment_length, peaks[i]))
             segment_end = int(max(peaks[i] + segment_length, peaks[i]))
 
-            segment = ecg_cleaned[segment_start : segment_end]
+            segment = ecg_cleaned[segment_start: segment_end]
 
             gradient = np.gradient(segment)
 
-            min_grad_point = [np.argmin(gradient) + segment_start, segment[np.argmin(gradient)]]
+            min_grad_point = [np.argmin(gradient) + segment_start,
+                              segment[np.argmin(gradient)]]
             min_grad_value = min(gradient)
 
-            intersections.append(round((baseline - min_grad_point[1] + min_grad_value * min_grad_point[0]) / min_grad_value))
+            intersections.append(
+                round((baseline - min_grad_point[1] + min_grad_value * min_grad_point[0]) / min_grad_value))
 
     return np.array(intersections)
 
@@ -41,8 +44,10 @@ def get_qt_intervals(q_onsets, t_offsets):
 
 
 def get_median_qt(ecg_cleaned, ecg_parameters):
-    q_onsets = get_q_onsets(ecg_cleaned, ecg_parameters['Q_peaks'], ecg_parameters['P_offsets'], ecg_parameters['RR'])
-    t_offsets = get_t_offsets(ecg_cleaned, ecg_parameters['T_peaks'], ecg_parameters['P_offsets'], ecg_parameters['RR'])
+    q_onsets = get_q_onsets(
+        ecg_cleaned, ecg_parameters['Q_peaks'], ecg_parameters['P_offsets'], ecg_parameters['RR'])
+    t_offsets = get_t_offsets(
+        ecg_cleaned, ecg_parameters['T_peaks'], ecg_parameters['P_offsets'], ecg_parameters['RR'])
 
     qt_intervals = get_qt_intervals(q_onsets, t_offsets)
 

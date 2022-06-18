@@ -1,6 +1,7 @@
 import torch.nn as nn
 from ECG.NN_based_approach.utils import shape_change_conv, make_standard_double_layer
 
+
 class ConvNet(nn.Module):
     def __init__(self, input_shape=(12, 5000), n_classes=12):
         super(ConvNet, self).__init__()
@@ -157,5 +158,3 @@ class ConvNet1(nn.Module):
         x4 = self.conv4(x3)
         x5 = self.lin1(x4)
         return x5
-
-

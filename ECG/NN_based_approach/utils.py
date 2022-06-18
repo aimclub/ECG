@@ -2,11 +2,14 @@ import torch.nn as nn
 import torch
 import numpy as np
 
+
 def shape_change_conv(input_shape, kernel_size, padding, stride):
     out_shape = [0, 0]
     # int((H_in + 2*padding - dilation*(kernel_size-1) - 1)/stride + 1)
-    out_shape[0] = int((input_shape[0] + 2 * padding[0] - 1 * (kernel_size[0] - 1) - 1) / stride[0] + 1)
-    out_shape[1] = int((input_shape[1] + 2 * padding[1] - 1 * (kernel_size[1] - 1) - 1) / stride[1] + 1)
+    out_shape[0] = int((input_shape[0] + 2 * padding[0] - 1 *
+                       (kernel_size[0] - 1) - 1) / stride[0] + 1)
+    out_shape[1] = int((input_shape[1] + 2 * padding[1] - 1 *
+                       (kernel_size[1] - 1) - 1) / stride[1] + 1)
     return out_shape
 
 
@@ -27,6 +30,7 @@ def make_standard_layer(in_channels, out_channels, kernel_size,
                      padding=pool_padding, stride=pool_stride)
     )
 
+
 class DoublePathLayer(nn.Module):
     def __init__(self, layer1, layer2, layerunite, unite='concat'):
         super(DoublePathLayer, self).__init__()
@@ -45,6 +49,7 @@ class DoublePathLayer(nn.Module):
             x1 = torch.cat([x1, x2], dim=1)
         x1 = self.layerunite(x1)
         return x1
+
 
 def make_standard_double_layer(in_ch=1,
                                out_ch=2,

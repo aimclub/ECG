@@ -2,27 +2,33 @@ from enum import Enum
 from dataclasses import dataclass
 from PIL import Image
 
+
 @dataclass
 class Failed:
     reason: str
 
+
 @dataclass
 class TextExplanation:
     content: str
+
 
 @dataclass
 class TextAndImageExplanation:
     text: str
     image: Image.Image
 
+
 class Diagnosis(Enum):
     STE = 'ST Elevation'
     MI = 'Myocardial Infarction'
     BER = 'Benign Early Repolarization'
 
+
 class ElevatedST(Enum):
     Abscent = 'No significant ST elevation'
     Present = 'Significant ST elevation'
+
 
 @dataclass
 class RiskMarkers:

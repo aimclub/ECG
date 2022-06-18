@@ -2,6 +2,7 @@ import numpy as np
 import neurokit2 as nk
 from math import isnan, nan
 
+
 def samples_to_ms(value, sampling_rate):
     return value / sampling_rate * 1000
 

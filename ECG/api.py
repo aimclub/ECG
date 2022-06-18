@@ -24,7 +24,6 @@ def convert_image_to_signal(image: Image.Image) -> np.ndarray or Failed:
         return Failed(reason='Failed to convert image to signal due to an internal error')
 
 
-
 ###################
 ## ST-elevation ###
 ###################
@@ -39,10 +38,12 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int) -> Tuple[Elevated
         ste_assessment = ElevatedST.Present if ste_bool else ElevatedST.Abscent
 
         explanation = 'ST elevation value in lead V3 (' + str(ste_mV) + ' mV)' + (' did not exceed ', ' exceeded ')[ste_bool] + \
-            'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + (' not detected.', ' detected.')[ste_bool]
+            'the threshold ' + str(elevation_threshold) + ', therefore ST elevation was' + \
+            (' not detected.', ' detected.')[ste_bool]
         return (ste_assessment, TextExplanation(content=explanation))
     except:
         return Failed(reason='Failed to assess ST elevation due to an internal error')
+
 
 def check_ST_elevation_with_NN(signal: np.ndarray) -> Tuple[ElevatedST, TextExplanation] or Failed:
     try:
@@ -98,6 +99,7 @@ def check_BER_with_NN(signal: np.ndarray) -> Tuple[bool, TextAndImageExplanation
         return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
     except:
         return Failed(reason='Failed to check for BER due to an internal error')
+
 
 def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
     try:
