@@ -2,7 +2,7 @@ import numpy as np
 import ECG.api as api
 from PIL import Image
 from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
-    TextExplanation, TextAndImageExplanation
+    TextExplanation, TextAndImageExplanation, NNExplanation
 from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
     check_data_type, compare_values
 from typing import Tuple
@@ -20,6 +20,12 @@ def check_text_image_explanation(explanation, groundtruth_text):
                    "Unexpected explanation", multiline=True)
     assert isinstance(explanation.image, Image.Image)
 
+
+def check_nn_explanation(explanation, groundtruth_text):
+    check_data_type(explanation, NNExplanation)
+    compare_values(explanation.text, groundtruth_text,
+                   "Unexpected explanation", multiline=True)
+    assert len(explanation.images) > 0
 
 def _get_NN_test_data(option):
     options = {
@@ -173,7 +179,7 @@ def test_check_BER_with_NN_positive():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to recognize BER")
     gt_explanation = "BER probability is 0.8727"
-    check_text_image_explanation(result[1], gt_explanation)
+    check_nn_explanation(result[1], gt_explanation)
 
 
 def test_check_BER_with_NN_negative():
@@ -184,7 +190,7 @@ def test_check_BER_with_NN_negative():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard BER")
     gt_explanation = "BER probability is 0.5973"
-    check_text_image_explanation(result[1], gt_explanation)
+    check_nn_explanation(result[1], gt_explanation)
 
 
 def test_check_MI_with_NN_positive():
@@ -195,7 +201,7 @@ def test_check_MI_with_NN_positive():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to recognize MI")
     gt_explanation = "MI probability is 0.9953"
-    check_text_image_explanation(result[1], gt_explanation)
+    check_nn_explanation(result[1], gt_explanation)
 
 
 def test_check_MI_with_NN_negative():
@@ -206,4 +212,26 @@ def test_check_MI_with_NN_negative():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard MI")
     gt_explanation = "MI probability is 0.0197"
-    check_text_image_explanation(result[1], gt_explanation)
+    check_nn_explanation(result[1], gt_explanation)
+
+
+def test_check_BER_without_gradcam():
+    filename = _get_NN_test_data('ber')
+    signal = get_ecg_signal(filename)
+    result = api.check_BER_with_NN(signal, gradcam_enabled=False)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], True, "Failed to recognize BER")
+    assert (isinstance(result[1], NNExplanation))
+    len(result[1].images) == 0
+
+
+def test_check_MI_without_gradcam():
+    filename = _get_NN_test_data('mi')
+    signal = get_ecg_signal(filename)
+    result = api.check_MI_with_NN(signal, gradcam_enabled=False)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], True, "Failed to recognize MI")
+    assert(isinstance(result[1], NNExplanation))
+    len(result[1].images) == 0
