@@ -160,6 +160,7 @@ def check_BER_with_NN(signal: np.ndarray, gradcam_enabled=True)\
 
     Args:
         signal (np.ndarray): array representation of ECG signal. Must be with the length more than 5000 ms.
+        gradcam_enabled (bool): a flag to generate images or not.
 
     Returns:
         Tuple[bool, NNExplanation] or Failed: a tuple containing boolean
@@ -180,6 +181,7 @@ def check_MI_with_NN(signal: np.ndarray, gradcam_enabled=True) -> Tuple[bool, NN
 
     Args:
         signal (np.ndarray): array representation of ECG signal. Must be with the length more than 5000 ms.
+        gradcam_enabled (bool): a flag to generate images or not.
 
     Returns:
         Tuple[bool, NNExplanation] or Failed: a tuple containing boolean
