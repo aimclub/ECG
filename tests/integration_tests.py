@@ -27,6 +27,7 @@ def check_nn_explanation(explanation, groundtruth_text):
                    "Unexpected explanation", multiline=True)
     assert len(explanation.images) > 0
 
+
 def _get_NN_test_data(option):
     options = {
         'ber': './tests/test_data/BER.mat',

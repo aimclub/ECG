@@ -88,10 +88,12 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
 
     images = []
     cams = []
-    layers = [net.conv1, net.conv2, net.conv3, net.conv4] if layered_images else [net.conv2]
+    layers = [net.conv1, net.conv2, net.conv3,
+              net.conv4] if layered_images else [net.conv2]
 
     for layer in layers:
-        cams.append(GradCam(model=net, target_layer=layer, use_cuda=torch.cuda.is_available()))
+        cams.append(GradCam(model=net, target_layer=layer,
+                    use_cuda=torch.cuda.is_available()))
 
     for layer in range(len(cams)):
         cam = cams[layer]
@@ -104,7 +106,8 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
             '{}_Predicted{}'.format(tag, int(pred.item() >= threshold))
 
         res = np.array(res.squeeze(0))
-        res_range = np.max(res, axis=1, keepdims=True) - np.min(res, axis=1, keepdims=True)
+        res_range = np.max(res, axis=1, keepdims=True) - \
+            np.min(res, axis=1, keepdims=True)
         res = (res - np.min(res, axis=1, keepdims=True))
         res = (res / (res_range + 0.0000001)) * 0.9
 
@@ -128,7 +131,8 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
                 os.makedirs(save_path)
             plt.savefig('{}/{}.png'.format(save_path, name))
 
-        im = Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb())
+        im = Image.frombytes('RGB', fig.canvas.get_width_height(),
+                             fig.canvas.tostring_rgb())
         images.append(im)
 
         plt.close('all')
