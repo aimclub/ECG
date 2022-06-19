@@ -19,6 +19,19 @@ class TextAndImageExplanation:
     image: Image.Image
 
 
+@dataclass
+class NNExplanation:
+    prob: float
+    text: str
+    images: [Image.Image]
+
+
+@dataclass
+class NNResult:
+    prob: float
+    images: [Image.Image]
+
+
 class Diagnosis(Enum):
     STE = 'ST Elevation'
     MI = 'Myocardial Infarction'

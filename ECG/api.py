@@ -3,7 +3,7 @@ import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
-    TextExplanation, TextAndImageExplanation
+    TextExplanation, TextAndImageExplanation, NNExplanation
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
@@ -154,38 +154,42 @@ def diagnose_with_risk_markers(signal: np.ndarray,
         return Failed(reason='Failed to diagnose due to an internal error')
 
 
-def check_BER_with_NN(signal: np.ndarray)\
-        -> Tuple[bool, TextAndImageExplanation] or Failed:
+def check_BER_with_NN(signal: np.ndarray, gradcam_enabled=True)\
+        -> Tuple[bool, NNExplanation] or Failed:
     """This functions checks for BER on ECG signal with ST elevation. Uses a NN.
 
     Args:
-        signal (np.ndarray): array representation of ECG signal
+        signal (np.ndarray): array representation of ECG signal. Must be with the length more than 5000 ms.
 
     Returns:
-        Tuple[bool, TextAndImageExplanation] or Failed: a tuple containing boolean
+        Tuple[bool, NNExplanation] or Failed: a tuple containing boolean
             presence of BER and explanation with text and GradCAM image or Failed
     """
     try:
-        res, prob, gradcam = NN_pipeline.is_BER(signal)
-        text_explanation = f'BER probability is {round(prob, 4)}'
-        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
+        threshold = 0.6
+        result = NN_pipeline.is_BER(signal, threshold=threshold, gradcam_enabled=gradcam_enabled, layered_images=False)
+        text_explanation = f'BER probability is {round(result.prob, 4)}'
+        return result.prob > threshold, NNExplanation(prob=result.prob, text=text_explanation, images=result.images)
+
     except Exception:
         return Failed(reason='Failed to check for BER due to an internal error')
 
 
-def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Failed:
+def check_MI_with_NN(signal: np.ndarray, gradcam_enabled=True) -> Tuple[bool, NNExplanation] or Failed:
     """This functions checks for MI on ECG signal with ST elevation. Uses a NN.
 
     Args:
-        signal (np.ndarray): array representation of ECG signal
+        signal (np.ndarray): array representation of ECG signal. Must be with the length more than 5000 ms.
 
     Returns:
-        Tuple[bool, TextAndImageExplanation] or Failed: a tuple containing boolean
+        Tuple[bool, NNExplanation] or Failed: a tuple containing boolean
             presence of MI and explanation with text and GradCAM image or Failed
     """
     try:
-        res, prob, gradcam = NN_pipeline.is_MI(signal)
-        text_explanation = f'MI probability is {round(prob, 4)}'
-        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
+        threshold = 0.7
+        result = NN_pipeline.is_MI(signal, threshold=threshold, gradcam_enabled=gradcam_enabled, layered_images=True)
+        text_explanation = f'MI probability is {round(result.prob, 4)}'
+        return result.prob > threshold, NNExplanation(prob=result.prob, text=text_explanation, images=result.images)
+
     except Exception:
         return Failed(reason='Failed to check for MI due to an internal error')
