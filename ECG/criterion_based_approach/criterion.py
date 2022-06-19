@@ -1,6 +1,7 @@
 from ECG.criterion_based_approach.util import mV_to_mm
 import numpy as np
 
+
 def calculate_stemi_criterion(qtc_ms, median_r_amplitude, median_ste60, tuned: bool):
     ste60_mm = mV_to_mm(median_ste60)
     r_amplitude_mm = mV_to_mm(median_r_amplitude)
@@ -16,4 +17,3 @@ def get_stemi_diagnosis(stemi_criterion, tuned: bool):
         return stemi_criterion >= 126.9
     else:
         return stemi_criterion > 23.4
-    

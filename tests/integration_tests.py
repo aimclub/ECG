@@ -1,19 +1,25 @@
 import numpy as np
 import ECG.api as api
 from PIL import Image
-from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers, TextExplanation, TextAndImageExplanation
-from tests.test_util import get_ecg_signal, get_ecg_array, open_image, check_data_type, compare_values
+from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
+    TextExplanation, TextAndImageExplanation
+from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
+    check_data_type, compare_values
 from typing import Tuple
 
 
 def check_text_explanation(explanation, groundtruth_text):
     check_data_type(explanation, TextExplanation)
-    compare_values(explanation.content, groundtruth_text, "Unexpected explanation", multiline=True)
+    compare_values(explanation.content, groundtruth_text,
+                   "Unexpected explanation", multiline=True)
+
 
 def check_text_image_explanation(explanation, groundtruth_text):
     check_data_type(explanation, TextAndImageExplanation)
-    compare_values(explanation.text, groundtruth_text, "Unexpected explanation", multiline=True)
+    compare_values(explanation.text, groundtruth_text,
+                   "Unexpected explanation", multiline=True)
     assert isinstance(explanation.image, Image.Image)
+
 
 def _get_NN_test_data(option):
     options = {
@@ -39,7 +45,8 @@ def test_convert_image_to_signal():
     result = api.convert_image_to_signal(image)
     max_diff = np.abs(groundtruth - result).max()
 
-    assert max_diff < 1e-14, f'Recognized signal does not match the groundtruth. Max difference is {max_diff}'
+    assert max_diff < 1e-14, f'Recognized signal does not match the groundtruth."\
+        + "Max difference is {max_diff}'
 
 
 ###################
@@ -52,15 +59,18 @@ def test_check_ST_elevation():
     result = api.check_ST_elevation(signal, sampling_rate=500)
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
-    compare_values(result[0], ElevatedST.Present, "Failed to detect significant ST elevation")
-    gt_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded the threshold 0.2," \
-        +" therefore ST elevation was detected."
+    compare_values(result[0], ElevatedST.Present,
+                   "Failed to detect significant ST elevation")
+    gt_explanation = "ST elevation value in lead V3 (0.225 mV) exceeded "\
+        + "the threshold 0.2, therefore ST elevation was detected."
     check_text_explanation(result[1], gt_explanation)
-    
+
+
 def test_check_ST_elevation_failure():
     filename = './tests/test_data/NeurokitFails.mat'
     result = api.check_ST_elevation(get_ecg_signal(filename), sampling_rate=500)
     check_data_type(result, Failed)
+
 
 def test_check_ST_elevation_with_NN_present():
     filename = _get_NN_test_data('ste')
@@ -68,9 +78,11 @@ def test_check_ST_elevation_with_NN_present():
     result = api.check_ST_elevation_with_NN(signal)
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
-    compare_values(result[0], ElevatedST.Present, "Failed to detect significant ST elevation")
+    compare_values(result[0], ElevatedST.Present,
+                   "Failed to detect significant ST elevation")
     gt_explanation = "Significant ST elevation probability is 0.6342"
     check_text_image_explanation(result[1], gt_explanation)
+
 
 def test_check_ST_elevation_with_NN_absent():
     filename = _get_NN_test_data('normal')
@@ -78,7 +90,8 @@ def test_check_ST_elevation_with_NN_absent():
     result = api.check_ST_elevation_with_NN(signal)
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
-    compare_values(result[0], ElevatedST.Abscent, "Failed to detect absence significant ST elevation")
+    compare_values(result[0], ElevatedST.Abscent,
+                   "Failed to detect absence significant ST elevation")
     gt_explanation = "Significant ST elevation probability is 0.489"
     check_text_image_explanation(result[1], gt_explanation)
 
@@ -95,6 +108,7 @@ def test_evaluate_risk_markers():
     compare_values(result.Ste60_V3, 0.225, "Failed to evaluate STE60 V3")
     compare_values(result.QTc, 501, "Failed to evaluate QTc")
     compare_values(result.RA_V4, 0.315, "Failed to evaluate RA V4")
+
 
 def test_evaluate_risk_markers_failure():
     filename = './tests/test_data/NeurokitFails.mat'
@@ -113,10 +127,12 @@ def test_diagnose_with_risk_markers_MI():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], Diagnosis.MI, "Failed to recognize MI")
-    gt_explanation = "Criterion value calculated as follows: (1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms])"\
-        +" – (0.326 * [RA V4 in mm])) = 31.2231 exceeded the threshold 23.4,"\
-        +" therefore the diagnosis is Myocardial Infarction"
+    gt_explanation = "Criterion value calculated as follows: "\
+        + "(1.196 * [STE60 V3 in mm]) + (0.059 * [QTc in ms])"\
+        + " – (0.326 * [RA V4 in mm])) = 31.2231 exceeded the threshold 23.4,"\
+        + " therefore the diagnosis is Myocardial Infarction"
     check_text_explanation(result[1], gt_explanation)
+
 
 def test_diagnose_with_risk_markers_MI_tuned():
     filename = './tests/test_data/MI.mat'
@@ -126,10 +142,13 @@ def test_diagnose_with_risk_markers_MI_tuned():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], Diagnosis.MI, "Failed to recognize MI")
     check_data_type(result[1], TextExplanation)
-    gt_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
-         + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 151.47 exceeded the threshold 126.9,"\
-         + " therefore the diagnosis is Myocardial Infarction"
+    gt_explanation = "Criterion value calculated as follows: "\
+        + "(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
+        + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 151.47 "\
+        + "exceeded the threshold 126.9,"\
+        + " therefore the diagnosis is Myocardial Infarction"
     check_text_explanation(result[1], gt_explanation)
+
 
 def test_diagnose_with_risk_markers_BER_tuned():
     filename = './tests/test_data/BER.mat'
@@ -138,10 +157,13 @@ def test_diagnose_with_risk_markers_BER_tuned():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], Diagnosis.BER, "Failed to recognize BER")
-    gt_explanation = "Criterion value calculated as follows: (2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
-        +" + (-1.7 * np.minimum([RA V4 in mm], 19)) = 118.4062869471591 did not exceed the threshold 126.9,"\
-        +" therefore the diagnosis is Benign Early Repolarization"
+    gt_explanation = "Criterion value calculated as follows: "\
+        + "(2.9 * [STE60 V3 in mm]) + (0.3 * [QTc in ms])"\
+        + " + (-1.7 * np.minimum([RA V4 in mm], 19)) = 118.4062869471591"\
+        + " did not exceed the threshold 126.9,"\
+        + " therefore the diagnosis is Benign Early Repolarization"
     check_text_explanation(result[1], gt_explanation)
+
 
 def test_check_BER_with_NN_positive():
     filename = _get_NN_test_data('ber')
@@ -153,6 +175,7 @@ def test_check_BER_with_NN_positive():
     gt_explanation = "BER probability is 0.8727"
     check_text_image_explanation(result[1], gt_explanation)
 
+
 def test_check_BER_with_NN_negative():
     filename = _get_NN_test_data('not_ber')
     signal = get_ecg_signal(filename)
@@ -163,6 +186,7 @@ def test_check_BER_with_NN_negative():
     gt_explanation = "BER probability is 0.5973"
     check_text_image_explanation(result[1], gt_explanation)
 
+
 def test_check_MI_with_NN_positive():
     filename = _get_NN_test_data('mi')
     signal = get_ecg_signal(filename)
@@ -172,6 +196,7 @@ def test_check_MI_with_NN_positive():
     compare_values(result[0], True, "Failed to recognize MI")
     gt_explanation = "MI probability is 0.9953"
     check_text_image_explanation(result[1], gt_explanation)
+
 
 def test_check_MI_with_NN_negative():
     filename = _get_NN_test_data('ber')
