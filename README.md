@@ -1,6 +1,7 @@
-![logo](docs/logo.jpg)
+![logo](docs/logo.png)
 
-This repository contains ECG - an open-source library for assisting in diagnostics of heart conditions from ECG. This library provides functionality of heart condition detection, differential diagnostics, and risk markers evaluation. The library handles ECGs in both formats, as signal or as a photo.
+# ECG Recognition Library
+This repository contains ECG Recognition Library - an open-source library for assisting in diagnostics of heart conditions from ECG. This library provides functionality of heart condition detection, differential diagnostics, and risk markers evaluation. The library handles ECGs in both formats, as signal or as a photo.
 
 ## Project Description
 
@@ -11,7 +12,7 @@ Main features implemented in the library
 1. IM risk markers evaluation
 1. IM/BER differential diagnosis
 
-Thus compared to other frameworks, ECG:
+Thus compared to other frameworks, ECG Recognition Library:
 * Handles ECGs provised as a signal as well as an image
 * Provides a range of functionality useful for IM diagnostics
 
@@ -92,4 +93,4 @@ We acknowledge the contributors for their important impact and the participants 
 TBD
 
 ## Citation
-TBD
+Information will be provided after publication acceptance
