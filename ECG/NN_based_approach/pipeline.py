@@ -1,17 +1,17 @@
 import numpy as np
 import torch
+import os
+import torch.nn as nn
 from typing import Tuple, Any
 from PIL import Image
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from pytorch_grad_cam.utils.image import show_cam_on_image
-from ECG.NN_based_approach.utils import signal_rescale
 from ECG.data_classes import ElevatedST, NNResult
+from ECG.NN_based_approach.utils import signal_rescale
 from ECG.NN_based_approach.model_factory import create_model
 from ECG.NN_based_approach.NN_Enums import NetworkType, ModelType
-import torch.nn as nn
 from ECG.NN_based_approach.grad_cam import GradCam
-
 import matplotlib
 matplotlib.use('Agg')
 
@@ -124,6 +124,8 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
         plt.gcf().canvas.get_renderer()
 
         if save_path is not None:
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
             plt.savefig('{}/{}.png'.format(save_path, name))
 
         im = Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb())
