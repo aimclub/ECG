@@ -45,7 +45,8 @@ def explain(signal, cam):
     return visualization
 
 
-def is_BER(signal: np.ndarray, threshold: float, gradcam_enabled: bool, layered_images: bool) -> NNResult:
+def is_BER(signal: np.ndarray, threshold: float,
+           gradcam_enabled: bool, layered_images: bool) -> NNResult:
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.BER)
 
@@ -58,7 +59,8 @@ def is_BER(signal: np.ndarray, threshold: float, gradcam_enabled: bool, layered_
     return NNResult(prob, images)
 
 
-def is_MI(signal: np.ndarray, threshold: float, gradcam_enabled: bool, layered_images: bool) -> NNResult:
+def is_MI(signal: np.ndarray, threshold: float,
+          gradcam_enabled: bool, layered_images: bool) -> NNResult:
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.MI)
 
@@ -102,8 +104,9 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
         cls = torch.tensor([1.])
         (res, pred) = cam(input_tensor=img.unsqueeze(0), target_category=cls)
 
-        name = '{}_layer{}_Predicted{}'.format(tag, layer, int(pred.item() >= threshold)) if layered_images else \
-            '{}_Predicted{}'.format(tag, int(pred.item() >= threshold))
+        predicted = int(pred.item() >= threshold)
+        name = '{}_layer{}_Predicted{}'.format(tag, layer, predicted) if layered_images\
+            else '{}_Predicted{}'.format(tag, predicted)
 
         res = np.array(res.squeeze(0))
         res_range = np.max(res, axis=1, keepdims=True) - \
@@ -115,7 +118,8 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
 
         fig, ax = plt.subplots(res.shape[0], figsize=(15, 12))
         for i in range(res.shape[0]):
-            ax[i].vlines(list(range(3000)), ymin=np.min(signal[i]), ymax=np.max(signal[i]),
+            ax[i].vlines(list(range(3000)),
+                         ymin=np.min(signal[i]), ymax=np.max(signal[i]),
                          alpha=np.clip(res.T[0:3000, i], 0.1, 0.9) ** 2, colors='grey')
             ax[i].plot(signal.T[0:3000, i])
             ax[i].grid()

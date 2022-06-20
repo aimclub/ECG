@@ -5,10 +5,10 @@ import torch
 class custom_loss(nn.Module):
     def __init__(self, weight, pref_for_one=1.):
         '''
-        This is class that implement asymmetric BCE_loss. It is required for imbalance data
-        to prevent overfitting and becoming constant classifier.
+        This is class that implement asymmetric BCE_loss. It is required for imbalance
+        data to prevent overfitting and becoming constant classifier.
         :param weight: Weights to compute loss
-        :param pref_for_one: how much attention it is required to give to errors on class 1.
+        :param pref_for_one: how much attention is required to give to errors on class 1.
         '''
         super(custom_loss, self).__init__()
         assert pref_for_one >= 0, 'Attention to class one must be positive!'
@@ -78,9 +78,9 @@ def NPV_metric(pred, target):
 
 
 def DOR_metric(pred, target):
-    # diagnostic odds ratio - ratio of the odds of being true positive to the odds of being false positive
+    # ratio of the odds of being true positive to the odds of being false positive
     tp = tp_metric(pred, target)
     fp = fp_metric(pred, target)
     tn = tn_metric(pred, target) + 1e-8
     fn = fn_metric(pred, target) + 1e-8
-    return (tp/fn)/(fp/tn + 1e-8)
+    return (tp / fn) / (fp / tn + 1e-8)

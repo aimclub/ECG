@@ -48,12 +48,11 @@ class GradCam:
                         target_category,
                         activations,
                         grads):
-        grads_power_2 = grads ** 2
-        grads_power_3 = grads_power_2 * grads
-        sum_activations = np.sum(activations, axis=(2, 3))
+        grads_p2 = grads ** 2
+        grads_p3 = grads_p2 * grads
+        activations = np.sum(activations, axis=(2, 3))
         eps = 0.000001
-        aij = grads_power_2 / (2 * grads_power_2 +
-                               sum_activations[:, :, None, None] * grads_power_3 + eps)
+        aij = grads_p2 / (2 * grads_p2 + activations[:, :, None, None] * grads_p3 + eps)
         aij = np.where(grads != 0, aij, 0)
 
         weights = np.maximum(grads, 0) * aij
