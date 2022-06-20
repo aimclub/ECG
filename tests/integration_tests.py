@@ -75,7 +75,7 @@ def test_check_ST_elevation_failure():
 def test_check_ST_elevation_with_NN_present():
     filename = _get_NN_test_data('ste')
     signal = get_ecg_signal(filename)
-    result = api.check_ST_elevation_with_NN(signal)
+    result = api.check_ST_elevation_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Present,
@@ -87,7 +87,7 @@ def test_check_ST_elevation_with_NN_present():
 def test_check_ST_elevation_with_NN_absent():
     filename = _get_NN_test_data('normal')
     signal = get_ecg_signal(filename)
-    result = api.check_ST_elevation_with_NN(signal)
+    result = api.check_ST_elevation_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Abscent,
@@ -168,7 +168,7 @@ def test_diagnose_with_risk_markers_BER_tuned():
 def test_check_BER_with_NN_positive():
     filename = _get_NN_test_data('ber')
     signal = get_ecg_signal(filename)
-    result = api.check_BER_with_NN(signal)
+    result = api.check_BER_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to recognize BER")
@@ -179,7 +179,7 @@ def test_check_BER_with_NN_positive():
 def test_check_BER_with_NN_negative():
     filename = _get_NN_test_data('not_ber')
     signal = get_ecg_signal(filename)
-    result = api.check_BER_with_NN(signal)
+    result = api.check_BER_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard BER")
@@ -190,7 +190,7 @@ def test_check_BER_with_NN_negative():
 def test_check_MI_with_NN_positive():
     filename = _get_NN_test_data('mi')
     signal = get_ecg_signal(filename)
-    result = api.check_MI_with_NN(signal)
+    result = api.check_MI_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to recognize MI")
@@ -201,7 +201,7 @@ def test_check_MI_with_NN_positive():
 def test_check_MI_with_NN_negative():
     filename = _get_NN_test_data('ber')
     signal = get_ecg_signal(filename)
-    result = api.check_MI_with_NN(signal)
+    result = api.check_MI_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to discard MI")

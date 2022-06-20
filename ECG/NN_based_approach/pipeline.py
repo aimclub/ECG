@@ -36,7 +36,7 @@ def is_BER(signal: np.ndarray, **kwargs) -> NNResult:
     threshold = kwargs.get('threshold', 0.7)
     gradcam_enabled = kwargs.get('gradcam_enabled', True)
     layered_images = kwargs.get('layered_images', False)
-    save_path = kwargs.get('save_path', './ECG/NN_based_approach/imgs')
+    save_path = kwargs.get('save_path', None)
 
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.BER)
@@ -55,7 +55,7 @@ def is_MI(signal: np.ndarray, **kwargs) -> NNResult:
     threshold = kwargs.get('threshold', 0.7)
     gradcam_enabled = kwargs.get('gradcam_enabled', True)
     layered_images = kwargs.get('layered_images', False)
-    save_path = kwargs.get('save_path', './ECG/NN_based_approach/imgs')
+    save_path = kwargs.get('save_path', None)
 
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.MI)
@@ -74,7 +74,7 @@ def check_STE(signal: np.ndarray, **kwargs) -> NNResult:
     threshold = kwargs.get('threshold', 0.7)
     gradcam_enabled = kwargs.get('gradcam_enabled', True)
     layered_images = kwargs.get('layered_images', False)
-    save_path = kwargs.get('save_path', './ECG/NN_based_approach/imgs')
+    save_path = kwargs.get('save_path', None)
 
     signal = signal_rescale(signal, up_slice=4000)
     net = create_model(net_type=NetworkType.Conv1,
