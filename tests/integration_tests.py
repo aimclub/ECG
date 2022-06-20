@@ -75,7 +75,9 @@ def test_check_ST_elevation_failure():
 def test_check_ST_elevation_with_NN_present():
     filename = _get_NN_test_data('ste')
     signal = get_ecg_signal(filename)
-    result = api.check_ST_elevation_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
+    result = api.check_ST_elevation_with_NN(
+        signal, save_path='./ECG/NN_based_approach/imgs'
+    )
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Present,
@@ -87,7 +89,9 @@ def test_check_ST_elevation_with_NN_present():
 def test_check_ST_elevation_with_NN_absent():
     filename = _get_NN_test_data('normal')
     signal = get_ecg_signal(filename)
-    result = api.check_ST_elevation_with_NN(signal, save_path='./ECG/NN_based_approach/imgs')
+    result = api.check_ST_elevation_with_NN(
+        signal, save_path='./ECG/NN_based_approach/imgs'
+    )
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], ElevatedST.Abscent,
