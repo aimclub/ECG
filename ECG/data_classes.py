@@ -1,11 +1,13 @@
 from enum import Enum
 from dataclasses import dataclass
 from PIL import Image
+from typing import Optional
 
 
 @dataclass
 class Failed:
     reason: str
+    exception: Optional[Exception]
 
 
 @dataclass
