@@ -2,12 +2,8 @@ import numpy as np
 import torch
 import os
 import torch.nn as nn
-from typing import Tuple, Any
 from PIL import Image
-from pytorch_grad_cam import GradCAM
-from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
-from pytorch_grad_cam.utils.image import show_cam_on_image
-from ECG.data_classes import ElevatedST, NNResult
+from ECG.data_classes import NNResult
 from ECG.NN_based_approach.utils import signal_rescale
 from ECG.NN_based_approach.model_factory import create_model
 from ECG.NN_based_approach.NN_Enums import NetworkType, ModelType
@@ -35,53 +31,61 @@ def predict(signal, net):
     return prob
 
 
-def explain(signal, cam):
-    input_tensor = _preprocess(signal)
+def is_BER(signal: np.ndarray, **kwargs) -> NNResult:
 
-    targets = [ClassifierOutputTarget(0)]
-    grayscale_cam = cam(input_tensor=input_tensor, targets=targets)[0]
-    visualization = Image.fromarray(show_cam_on_image(
-        _signal_to_img(signal), grayscale_cam, use_rgb=False))
-    return visualization
+    threshold = kwargs.get('threshold', 0.7)
+    gradcam_enabled = kwargs.get('gradcam_enabled', True)
+    layered_images = kwargs.get('layered_images', False)
+    save_path = kwargs.get('save_path', './ECG/NN_based_approach/imgs')
 
-
-def is_BER(signal: np.ndarray, threshold: float,
-           gradcam_enabled: bool, layered_images: bool) -> NNResult:
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.BER)
 
     images = []
     if gradcam_enabled:
         images = _gradcam(net, signal, threshold=threshold, layered_images=layered_images,
-                          save_path='./ECG/NN_based_approach/imgs', tag='BER')
+                          save_path=save_path, tag='BER')
     prob = predict(signal, net)
 
     return NNResult(prob, images)
 
 
-def is_MI(signal: np.ndarray, threshold: float,
-          gradcam_enabled: bool, layered_images: bool) -> NNResult:
+def is_MI(signal: np.ndarray, **kwargs) -> NNResult:
+
+    threshold = kwargs.get('threshold', 0.7)
+    gradcam_enabled = kwargs.get('gradcam_enabled', True)
+    layered_images = kwargs.get('layered_images', False)
+    save_path = kwargs.get('save_path', './ECG/NN_based_approach/imgs')
+
     signal = signal_rescale(signal, up_slice=5000)
     net = create_model(net_type=NetworkType.Conv, model_type=ModelType.MI)
 
     images = []
     if gradcam_enabled:
         images = _gradcam(net, signal, threshold=threshold, layered_images=layered_images,
-                          save_path='./ECG/NN_based_approach/imgs', tag='MI')
+                          save_path=save_path, tag='MI')
     prob = predict(signal, net)
 
     return NNResult(prob, images)
 
 
-def check_STE(signal: np.ndarray) -> NNResult:
+def check_STE(signal: np.ndarray, **kwargs) -> NNResult:
+
+    threshold = kwargs.get('threshold', 0.7)
+    gradcam_enabled = kwargs.get('gradcam_enabled', True)
+    layered_images = kwargs.get('layered_images', False)
+    save_path = kwargs.get('save_path', './ECG/NN_based_approach/imgs')
+
     signal = signal_rescale(signal, up_slice=4000)
     net = create_model(net_type=NetworkType.Conv1,
                        model_type=ModelType.STE, input_shape=(12, 4000))
-    cam = GradCAM(model=net, target_layers=[net.conv4], use_cuda=False)
+    images = []
+    if gradcam_enabled:
+        images = _gradcam(net, signal, threshold=threshold, layered_images=layered_images,
+                          save_path=save_path, tag='STE')
     prob = predict(signal, net)
-    visualization = explain(signal, cam)
 
-    return NNResult(prob, [visualization])
+    return NNResult(prob, images)
 
 
 def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images: bool,
@@ -103,9 +107,9 @@ def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images:
         cls = torch.tensor([1.])
         (res, pred) = cam(input_tensor=img.unsqueeze(0), target_category=cls)
 
-        predicted = int(pred.item() >= threshold)
-        name = '{}_layer{}_Predicted{}'.format(tag, layer, predicted) if layered_images\
-            else '{}_Predicted{}'.format(tag, predicted)
+        predicted = bool(pred.item() >= threshold)
+        name = '{}_layer{}_Predicted_{}'.format(tag, layer, predicted) if layered_images\
+            else '{}_Predicted_{}'.format(tag, predicted)
 
         res = np.array(res.squeeze(0))
         res_range = np.max(res, axis=1, keepdims=True) - \
