@@ -81,10 +81,10 @@ def check_ST_elevation_with_NN(signal: np.ndarray)\
     """
     try:
         result = NN_pipeline.check_STE(signal)
-        text_explanation = f'Significant ST elevation probability is {round(result.prob, 4)}'
+        text_expl = f'Significant ST elevation probability is {round(result.prob, 4)}'
         ste = ElevatedST.Present if result.prob > 0.6 else ElevatedST.Abscent
         explanation = NNExplanation(
-            prob=result.prob, text=text_explanation, images=result.images
+            prob=result.prob, text=text_expl, images=result.images
         )
         return ste, explanation
 
