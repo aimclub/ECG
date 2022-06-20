@@ -73,16 +73,15 @@ def is_MI(signal: np.ndarray, threshold: float,
     return NNResult(prob, images)
 
 
-def check_STE(signal: np.ndarray) -> Tuple[ElevatedST, str, Any]:
-    # returns ElevatedST, probability, GradCAM Image
+def check_STE(signal: np.ndarray) -> NNResult:
     signal = signal_rescale(signal, up_slice=4000)
     net = create_model(net_type=NetworkType.Conv1,
                        model_type=ModelType.STE, input_shape=(12, 4000))
     cam = GradCAM(model=net, target_layers=[net.conv4], use_cuda=False)
     prob = predict(signal, net)
     visualization = explain(signal, cam)
-    ste = ElevatedST.Present if prob > 0.6 else ElevatedST.Abscent
-    return ste, prob, visualization
+
+    return NNResult(prob, [visualization])
 
 
 def _gradcam(net: nn.Module, signal: np.array, threshold: float, layered_images: bool,

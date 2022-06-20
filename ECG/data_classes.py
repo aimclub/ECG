@@ -14,12 +14,6 @@ class TextExplanation:
 
 
 @dataclass
-class TextAndImageExplanation:
-    text: str
-    image: Image.Image
-
-
-@dataclass
 class NNExplanation:
     prob: float
     text: str

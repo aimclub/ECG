@@ -2,7 +2,7 @@ import numpy as np
 import ECG.api as api
 from PIL import Image
 from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
-    TextExplanation, TextAndImageExplanation, NNExplanation
+    TextExplanation, NNExplanation
 from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
     check_data_type, compare_values
 from typing import Tuple
@@ -12,13 +12,6 @@ def check_text_explanation(explanation, groundtruth_text):
     check_data_type(explanation, TextExplanation)
     compare_values(explanation.content, groundtruth_text,
                    "Unexpected explanation", multiline=True)
-
-
-def check_text_image_explanation(explanation, groundtruth_text):
-    check_data_type(explanation, TextAndImageExplanation)
-    compare_values(explanation.text, groundtruth_text,
-                   "Unexpected explanation", multiline=True)
-    assert isinstance(explanation.image, Image.Image)
 
 
 def check_nn_explanation(explanation, groundtruth_text):
@@ -88,7 +81,7 @@ def test_check_ST_elevation_with_NN_present():
     compare_values(result[0], ElevatedST.Present,
                    "Failed to detect significant ST elevation")
     gt_explanation = "Significant ST elevation probability is 0.6342"
-    check_text_image_explanation(result[1], gt_explanation)
+    check_nn_explanation(result[1], gt_explanation)
 
 
 def test_check_ST_elevation_with_NN_absent():
@@ -100,7 +93,7 @@ def test_check_ST_elevation_with_NN_absent():
     compare_values(result[0], ElevatedST.Abscent,
                    "Failed to detect absence significant ST elevation")
     gt_explanation = "Significant ST elevation probability is 0.489"
-    check_text_image_explanation(result[1], gt_explanation)
+    check_nn_explanation(result[1], gt_explanation)
 
 
 ###################

@@ -3,7 +3,7 @@ import numpy as np
 from typing import Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
-    TextExplanation, TextAndImageExplanation, NNExplanation
+    TextExplanation, NNExplanation
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
@@ -68,21 +68,26 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int)\
 
 
 def check_ST_elevation_with_NN(signal: np.ndarray)\
-        -> Tuple[ElevatedST, TextAndImageExplanation] or Failed:
+        -> Tuple[ElevatedST, NNExplanation] or Failed:
     """This function checks for significant ST elevation using a NN.
 
     Args:
         signal (np.ndarray): array representation of ECG signal
 
     Returns:
-        Tuple[ElevatedST, TextAndImageExplanation] or Failed:
+        Tuple[ElevatedST, NNExplanation] or Failed:
             a tuple of ST elevation evaluation and explanation
             with text and GradCAM image or Failed
     """
     try:
-        res, prob, gradcam = NN_pipeline.check_STE(signal)
-        text_explanation = f'Significant ST elevation probability is {round(prob, 4)}'
-        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
+        result = NN_pipeline.check_STE(signal)
+        text_explanation = f'Significant ST elevation probability is {round(result.prob, 4)}'
+        ste = ElevatedST.Present if result.prob > 0.6 else ElevatedST.Abscent
+        explanation = NNExplanation(
+            prob=result.prob, text=text_explanation, images=result.images
+        )
+        return ste, explanation
+
     except Exception:
         return Failed(reason='Failed to assess ST elevation due to an internal error')
 
