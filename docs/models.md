@@ -9,7 +9,7 @@ Third step is signal detection. The grayscale image is binarized using adaptive 
 
 The final step is signal extraction - the list of all connected pixels of the signal is converted to the 1D array where pixels are scaled and represent amplitudes of the signal. 
 
-The method is evaluated by calculating the average deviation between samples of the original and converted signals: images with daylight - 0.18mV, images with electric light - 0.18mV, images with bad lighting - 0.14mV. 
+The method is evaluated by calculating the average deviation between samples of the original and converted signals: images with daylight - 0.18mV, images with electric light - 0.14mV, images with bad lighting - 0.12mV. 
 
 ## Check ST elevation
 The ST segment elevation in lead V3 (STE60) in millivolts is compared to the threshold from medical practice (0.2 mV) [1]. If the ST elevation value exceeds the threshold, it is considered significant. The distribution of normal and elevated ST recordings from the 'China Physiological Signal Challenge 2018' [2] dataset are shown in the normalized density histogram below.

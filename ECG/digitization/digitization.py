@@ -3,20 +3,16 @@ import cv2
 from scipy import signal
 import PIL
 from PIL import Image
+import warnings
 
 
 def find_interval(gap: np.ndarray) -> float:
-    result = []
-    new_arr = gap[::-1]
-    for n, ind in enumerate(new_arr):
-        if n == len(gap) - 1:
-            break
-        elif (ind - new_arr[n + 1]) < 2:
-            continue
-        else:
-            result.append(ind - new_arr[n + 1])
+    new_arr = np.diff(gap)
+    result = np.delete(new_arr, np.where(new_arr == 1))
 
-    return np.mean(result)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        return np.nan if np.isnan(np.mean(result)) else np.mean(result) 
 
 
 def resize_pic(image: np.ndarray) -> np.ndarray:
@@ -42,18 +38,22 @@ def grid_detection(image: np.ndarray) -> float:
         grid = cv2.adaptiveThreshold(
             blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, kernel_size, c_kf)
     else:
-        image = resize_pic(image)
         grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        grayscale = grayscale.astype('float32')
+        intensity_shift = 20
+        grayscale += intensity_shift
+        grayscale = np.clip(grayscale, 0, 255)
+        grayscale = grayscale.astype('uint8')
         blur = cv2.GaussianBlur(grayscale, (3, 3), 0)
         grid = cv2.adaptiveThreshold(
             blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, 6)
         grid = cv2.medianBlur(grid, 3)
 
     intervals = []
-    for n_row, row in enumerate(grid):
-        for n_col, col in enumerate(row):
-            intervals.append(find_interval(np.where(grid[:, n_col] == 0)[0]))
-            intervals.append(find_interval(np.where(grid[n_row, :] == 0)[0]))
+    for n_row in range(grid.shape[0]):
+        intervals.append(find_interval(np.where(grid[n_row, :] == 0)[0]))
+    for n_col in range(grid.shape[1]):
+        intervals.append(find_interval(np.where(grid[:, n_col] == 0)[0]))
 
     scale = np.nanmean(np.array(intervals))
     scale = scale.round(1)
