@@ -12,7 +12,7 @@ def find_interval(gap: np.ndarray) -> float:
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
-        return np.nan if np.isnan(np.mean(result)) else np.mean(result) 
+        return np.nan if np.isnan(np.mean(result)) else np.mean(result)
 
 
 def resize_pic(image: np.ndarray) -> np.ndarray:
