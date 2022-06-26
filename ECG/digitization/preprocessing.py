@@ -18,7 +18,10 @@ def image_rotation(image: np.ndarray, angle: int = None) -> np.ndarray:
             angles.append(angle)
 
         median_angle = np.median(angles)
-        img_rotated = ndimage.rotate(image, median_angle)
+        if abs(median_angle) < 45:
+            img_rotated = ndimage.rotate(image, median_angle, cval=255)
+        else:
+            return image
     else:
         img_rotated = ndimage.rotate(image, angle)
 
@@ -107,6 +110,11 @@ def binarization(image: np.ndarray, threshold: float = None,
     assert image is not None
 
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    grayscale = grayscale.astype('float32')
+    intensity_shift = 50
+    grayscale += intensity_shift
+    grayscale = np.clip(grayscale, 0, 255)
+    grayscale = grayscale.astype('uint8')
 
     if threshold is None:
         if inverse:
