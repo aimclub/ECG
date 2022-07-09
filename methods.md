@@ -1,14 +1,4 @@
  ## Implemented methods
-* [ECG Library](index.md)
-    * [Project structure](project_structure.md)
-    * [Implemented methods](methods.md)
-    * [API](api.md)
-    * [How to install](install.md)
-    * [How to use](how-to-use.md)
-    * [Benchmarks](benchmarks.md)
-    * [How to contribute](how-to-contribute.md)
-    * [How to cite](how-to-cite.md)
-    * [Contact us](contact.md)
 
 ### Convert images to signal
 First step is preprocessing. An image is auto-rotated so that grid lines are orthogonal to the edges of the image. The algorithm searches for all lines in the image and calculates the angle of their inclination to rotate the picture. Then the RGB-format image is converted to grayscale for further work.
