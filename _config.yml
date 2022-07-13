@@ -6,7 +6,7 @@ description: > # this means to ignore newlines until "baseurl:"
     <div class='main-menu-item'><a href="index">About the library</a></div>
     <div class='menu-item'><a href="project_structure">Project structure</a></div>
     <div class='menu-item'><a href="methods">Implemented methods</a></div>
-    <div class='menu-item'><a href="api">API</a></div>
+    <div class='menu-item'><a href="docs/index.html">API</a></div>
     <div class='menu-item'><a href="install">How to install</a></div>
     <div class='menu-item'><a href="how-to-use">How to use</a></div>
     <div class='menu-item'><a href="benchmarks">Benchmarks</a></div>
