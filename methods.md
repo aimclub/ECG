@@ -1,4 +1,4 @@
- ## Implemented methods
+## Implemented methods
 
 ### Convert images to signal
 First step is preprocessing. An image is auto-rotated so that grid lines are orthogonal to the edges of the image. The algorithm searches for all lines in the image and calculates the angle of their inclination to rotate the picture. Then the RGB-format image is converted to grayscale for further work.
