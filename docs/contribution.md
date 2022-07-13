@@ -87,15 +87,15 @@ If your contribution requires a new library dependency:
 -  Double-check that the new dependency is easy to install via ``pip``
    or Anaconda and supports Python 3.7. If the dependency requires a
    complicated installation, then we most likely won't merge your
-   changes because we want to keep ECG library easy to install.
+   changes because we want to keep ECG Recognition Library easy to install.
 
 -  Add the required version of the library to [requirements.txt](https://github.com/tanyapole/ECG/blob/master/requirements.txt)
 
 Contribute to the documentation
 -------------------------------
-Take care of the documentation.
+Take care of the documentation. Add docstrings for API methods.
 
-TBD
+When introducting changes to API, update documentation with: `$ pdoc ECG/api.py -o ./docs`
 
 After submitting your pull request
 ----------------------------------

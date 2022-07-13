@@ -80,6 +80,8 @@ Requirements: Python 3.7
 ## Documentation
 The general description is available [here](https://tanyapole.github.io/ECG/).
 
+ECG Recognition Library API is available [here](docs/index.html)
+
 ## Examples & Tutorials
 We provide a [tutorial](examples/intro_to_ECG.ipynb) demonstrating suggested usage pipeline
 
