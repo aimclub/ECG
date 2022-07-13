@@ -80,7 +80,7 @@ Requirements: Python 3.7
 ## Documentation
 The general description is available [here](https://Med-AI-Lab.github.io/ECG/).
 
-ECG Recognition Library API is available [here](docs/index.html)
+ECG Recognition Library API is available [here](https://med-ai-lab.github.io/ECG/docs/ECG/api.html)
 
 ## Examples & Tutorials
 We provide a [tutorial](examples/intro_to_ECG.ipynb) demonstrating suggested usage pipeline
