@@ -38,7 +38,7 @@ Requirements: Python 3.7
     ```
 1. install the library as a package
     ```
-    $ python -m pip install git+ssh://git@github.com/tanyapole/ECG
+    $ python -m pip install git+ssh://git@github.com/Med-AI-Lab/ECG
     ```
 
 ## Development
@@ -51,7 +51,7 @@ Requirements: Python 3.7
     ```
 1. clone repository and install all requirements
     ```
-    $ git clone git@github.com:tanyapole/ECG.git
+    $ git clone git@github.com:Med-AI-Lab/ECG.git
     $ cd ECG
     $ pip install -r requirements.txt
     ```
@@ -78,7 +78,7 @@ Requirements: Python 3.7
     ```
 
 ## Documentation
-The general description is available [here](https://tanyapole.github.io/ECG/).
+The general description is available [here](https://Med-AI-Lab.github.io/ECG/).
 
 ECG Recognition Library API is available [here](docs/index.html)
 
