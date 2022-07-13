@@ -57,7 +57,8 @@ Requirements: Python 3.7
     ```
 1. run tests
     ```
-    $ pytest tests/api_tests.py
+    $ pytest tests/unit_tests.py
+    $ pytest tests/integration_tests.py
     ```
 1. fix code style to match PEP8 automatically with autopep8
     ```
