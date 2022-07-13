@@ -38,7 +38,7 @@ Requirements: Python 3.7
     ```
 1. install the library as a package
     ```
-    $ python -m pip install git+ssh://git@github.com/tanyapole/ECG
+    $ python -m pip install git+ssh://git@github.com/Med-AI-Lab/ECG
     ```
 
 ## Development
@@ -51,13 +51,14 @@ Requirements: Python 3.7
     ```
 1. clone repository and install all requirements
     ```
-    $ git clone git@github.com:tanyapole/ECG.git
+    $ git clone git@github.com:Med-AI-Lab/ECG.git
     $ cd ECG
     $ pip install -r requirements.txt
     ```
 1. run tests
     ```
-    $ pytest tests/api_tests.py
+    $ pytest tests/unit_tests.py
+    $ pytest tests/integration_tests.py
     ```
 1. fix code style to match PEP8 automatically with autopep8
     ```
@@ -78,9 +79,9 @@ Requirements: Python 3.7
     ```
 
 ## Documentation
-The general description is available [here](https://tanyapole.github.io/ECG/).
+The general description is available [here](https://Med-AI-Lab.github.io/ECG/).
 
-ECG Recognition Library API is available [here](docs/index.html)
+ECG Recognition Library API is available [here](https://med-ai-lab.github.io/ECG/docs/ECG/api.html)
 
 ## Examples & Tutorials
 We provide a [tutorial](examples/intro_to_ECG.ipynb) demonstrating suggested usage pipeline
