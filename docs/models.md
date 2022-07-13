@@ -59,5 +59,11 @@ If tuned == False (default) the original criterion formula is used. Otherwise, i
 Electrocardiographic differentiation of early repolarization from subtle anterior ST-segment elevation myocardial infarction.
 Ann Emerg Med. 2012 Jul;60(1):45-56.e2. doi: 10.1016/j.annemergmed.2012.02.015. Epub 2012 Apr 19. PMID: 22520989.
 
-## Differensial diagnostics with a neural network
-TBD
+## Diagnostics with neural networks
+The ECG Recognition Library also provides neural network (NN) based methods for checking significant ST-elevation and performing differential diagnostics of BER and MI.
+
+All NN-based methods use custom CNN architectures [1]. NN-based diagnostics is explained with GradCAM visualization [2].
+
+[1] - Krizhevsky, Alex & Sutskever, Ilya & Hinton, Geoffrey. (2012). ImageNet Classification with Deep Convolutional Neural Networks. Neural Information Processing Systems. 25. 10.1145/3065386. 
+
+[2] - R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh and D. Batra, "Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization," 2017 IEEE International Conference on Computer Vision (ICCV), 2017, pp. 618-626, doi: 10.1109/ICCV.2017.74.
