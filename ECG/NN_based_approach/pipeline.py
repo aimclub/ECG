@@ -32,7 +32,7 @@ def predict_and_explain(signal, net, cam):
     targets = [ClassifierOutputTarget(0)]
     grayscale_cam = cam(input_tensor=input_tensor, targets=targets)[0]
     visualization = Image.fromarray(show_cam_on_image(
-        _signal_to_img(signal), grayscale_cam, use_rgb=False))
+        _signal_to_img(signal), grayscale_cam, use_rgb=True))
 
     return prob, visualization
 
