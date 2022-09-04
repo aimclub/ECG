@@ -16,7 +16,8 @@ Thus compared to other frameworks, ECG Recognition Library:
 * Handles ECGs provised as a signal as well as an image
 * Provides a range of functionality useful for IM diagnostics
 
-![project_structure](docs/project_structure.png)
+![project_structure_signal](docs/signal_pipeline.png)
+![project_structure_ddx](docs/ddx_pipeline.png)
 
 Details of [implemented methods](docs/models.md).
 
