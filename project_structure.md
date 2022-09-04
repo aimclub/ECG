@@ -6,4 +6,5 @@ ECG Recognition Library includes the set of components:
 * docs - module that contains documentation for the project
 * examples - module with tutorials on ECG Recognition Library
 
-![structure](images/project_structure.png)
+![structure](images/signal_pipeline.png)
+![structure](images/ddx_pipeline.png)
