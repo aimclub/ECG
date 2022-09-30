@@ -25,6 +25,12 @@ Details of [implemented methods](docs/models.md).
 * Required ECG frequency: 500 Hz
 * Required length: ≥ 5s
 
+Additional image requirement:
+* Image should contain only ECG
+    * no background
+    * no foreign objects
+* Each image should contain only one lead
+
 ## Installation
 Requirements: Python 3.7
 
