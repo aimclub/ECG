@@ -19,6 +19,7 @@ def convert_image_to_signal(image: Image.Image) -> np.ndarray or Failed:
 
     Args:
         image (Image.Image): input image with ECG signal
+                             (one lead; see readme for the image requirements)
 
     Returns:
         np.ndarray or Failed: array representation of ECG signal or Failed
@@ -44,7 +45,8 @@ def check_ST_elevation(signal: np.ndarray, sampling_rate: int)\
 
     Args:
         signal (np.ndarray): array representation of ECG signal
-        sampling_rate (int): sampling rate
+                             (contains 12 rows, i-th row for i-th lead)
+        sampling_rate (int): sampling rate (see readme for the requirements)
 
     Returns:
         Tuple[ElevatedST, TextExplanation] or Failed: a tuple of ST elevation evaluation
@@ -74,6 +76,7 @@ def check_ST_elevation_with_NN(signal: np.ndarray)\
 
     Args:
         signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
 
     Returns:
         Tuple[ElevatedST, TextAndImageExplanation] or Failed:
@@ -99,7 +102,8 @@ def evaluate_risk_markers(signal: np.ndarray, sampling_rate: int)\
 
     Args:
         signal (np.ndarray): array representation of ECG signal
-        sampling_rate (int): sampling rate
+                             (contains 12 rows, i-th row for i-th lead)
+        sampling_rate (int): sampling rate (see readme for the requirements)
 
     Returns:
         RiskMarkers or Failed: MI risk markers values or Failed
@@ -124,7 +128,8 @@ def diagnose_with_risk_markers(signal: np.ndarray,
 
     Args:
         signal (np.ndarray): array representation of ECG signal
-        sampling_rate (int): sampling rate
+                             (contains 12 rows, i-th row for i-th lead)
+        sampling_rate (int): sampling rate (see readme for the requirements)
         tuned (bool, optional): True if you want to use formula tuned od CPSC 2018,
             otherwise False. Default is False
 
@@ -163,6 +168,7 @@ def check_BER_with_NN(signal: np.ndarray)\
 
     Args:
         signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
 
     Returns:
         Tuple[bool, TextAndImageExplanation] or Failed: a tuple containing boolean
@@ -182,6 +188,7 @@ def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Fail
 
     Args:
         signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
 
     Returns:
         Tuple[bool, TextAndImageExplanation] or Failed: a tuple containing boolean
