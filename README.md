@@ -96,11 +96,25 @@ We provide a [tutorial](examples/intro_to_ECG.ipynb) demonstrating suggested usa
 ## Contribution Guide
 The contribution guide is available in the [repository](./docs/contribution.md).
 
+## Publications about ECG Recognition Library
+In Russian:
+* Ватьян А.С., Гусарова Н.Ф., Змиевский Д.А., Кабышев М.А., Передреев Д.А., Полевая Т.А., Татаринова А.А., Томилов И.В.Автоматизированная оценка параметров ЭКГ в условиях пандемии COVID-19. Scientific and Technical Journal of Information Technologies, Mechanics and Optics, 2022, vol. 22, no. 5, in press
+* Пчелкин А.Ю., Гусарова Н.Ф. Кроссплатформенная разработка на базе вебтехнологий для поддержки решений в проблемно-ориентированных системах управления // Экономика. Право. Инновации. 2022. № 1. С. 41–47. http://dx.doi.org/10.17586/2713-1874-2022-1-41-47.
+
 ## Acknowledgments
-We acknowledge the contributors for their important impact and the participants of the numerous scientific conferences and workshops for their valuable advice and suggestions.
+### Affiliation
+![itmo_logo](docs/itmo_logo_small.png)
+
+The library was developed in [ITMO University](https://en.itmo.ru/).
+
+### Developers
+* A. Vatyan - team leader
+* N. Gusarova - chief scientific advisor
+* T. Polevaya
+* D. Zmievsky
+* D. Peredreev
+* M. Kabyshev
 
 ## Contacts
-TBD
-
-## Citation
-Information will be provided after publication acceptance
+* Alexandra Vatyan alexvatyan@gmail.com for collaboration suggestions
+* Tatyana Polevaya tpolevaya@itmo.ru for technical questions
