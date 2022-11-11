@@ -13,5 +13,5 @@ Requirements: Python 3.7
     ```
 1. install the library as a package
     ```
-    $ python -m pip install git+ssh://git@github.com/Med-AI-Lab/ECG
+    $ python -m pip install git+ssh://git@github.com/aimclub/ECG
     ```
