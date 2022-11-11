@@ -1,9 +1,9 @@
 Contribution
 =================
 
-We welcome you to [check the existing issues](https://github.com/Med-AI-Lab/ECG/issues) for bugs or
+We welcome you to [check the existing issues](https://github.com/aimclub/ECG/issues) for bugs or
 enhancements to work on. If you have an idea for an extension to ECG,
-please [file a new issue](https://github.com/Med-AI-Lab/ECG/issues/new) so we can
+please [file a new issue](https://github.com/aimclub/ECG/issues/new) so we can
 discuss it.
 
 Make sure to familiarize yourself with the project layout before making
@@ -13,9 +13,9 @@ any major contributions.
 How to contribute
 -----------------
 
-The preferred way to contribute to ECG is to fork the [main repository](https://github.com/Med-AI-Lab/ECG/) on GitHub:
+The preferred way to contribute to ECG is to fork the [main repository](https://github.com/aimclub/ECG/) on GitHub:
 
-1. Fork the [project repository](https://github.com/Med-AI-Lab/ECG):
+1. Fork the [project repository](https://github.com/aimclub/ECG):
    click on the 'Fork' button near the top of the page. This creates a
    copy of the code under your account on the GitHub server.
 
@@ -69,16 +69,16 @@ necessary so we can efficiently review and accept your changes.
 If your contribution changes ECG in any way:
 
 -  Update the
-   [documentation](https://github.com/Med-AI-Lab/ECG/tree/main/docs)
+   [documentation](https://github.com/aimclub/ECG/tree/main/docs)
    so all of your changes are reflected there.
 
 -  Update the
-   [README](https://github.com/Med-AI-Lab/ECG/blob/main/README.md)
+   [README](https://github.com/aimclub/ECG/blob/main/README.md)
    if anything there has changed.
 
 If your contribution involves any code changes:
 
--  Update the [project unit tests](https://github.com/Med-AI-Lab/ECG/tree/main/tests) to test your code changes.
+-  Update the [project unit tests](https://github.com/aimclub/ECG/tree/main/tests) to test your code changes.
 
 -  Make sure that your code is properly commented with [docstrings](https://www.python.org/dev/peps/pep-0257/) and comments explaining your rationale behind non-obvious coding practices.
 
@@ -89,7 +89,7 @@ If your contribution requires a new library dependency:
    complicated installation, then we most likely won't merge your
    changes because we want to keep ECG Recognition Library easy to install.
 
--  Add the required version of the library to [requirements.txt](https://github.com/Med-AI-Lab/ECG/blob/main/requirements.txt)
+-  Add the required version of the library to [requirements.txt](https://github.com/aimclub/ECG/blob/main/requirements.txt)
 
 Contribute to the documentation
 -------------------------------
