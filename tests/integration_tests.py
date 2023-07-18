@@ -1,10 +1,11 @@
 import numpy as np
 import ECG.api as api
 from PIL import Image
+from ECG.ECG_embedding_classification.Enums import ECGStatus, ECGClass
 from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
     TextExplanation, TextAndImageExplanation
 from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
-    check_data_type, compare_values
+    check_data_type, compare_values, check_signal_shape
 from typing import Tuple
 
 
@@ -207,3 +208,25 @@ def test_check_MI_with_NN_negative():
     compare_values(result[0], False, "Failed to discard MI")
     gt_explanation = "MI probability is 0.0197"
     check_text_image_explanation(result[1], gt_explanation)
+
+
+def test_perform_signal_classification_normal():
+    filename = './tests/test_data/class_norm.mat'
+    signal = get_ecg_signal(filename, read_nested=False)[:, :4000]
+    check_signal_shape(signal.shape, (12, 4000), "Wrong signal shape")
+    result = api.perform_signal_classification(signal, ECGClass.ALL)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], ECGStatus.NORM, "Failed to classify signal")
+    check_text_explanation(result[1], "The signal is ok")
+
+
+def test_perform_signal_classification_abnormal():
+    filename = './tests/test_data/class_abnorm.mat'
+    signal = get_ecg_signal(filename, read_nested=False)[:, :4000]
+    check_signal_shape(signal.shape, (12, 4000), "Wrong signal shape")
+    result = api.perform_signal_classification(signal, ECGClass.ALL)
+    check_data_type(result, Tuple)
+    compare_values(len(result), 2, "Wrong tuple length")
+    compare_values(result[0], ECGStatus.ABNORM, "Failed to classify signal")
+    check_text_explanation(result[1], "The signal has some abnormalities")

@@ -7,6 +7,8 @@ from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
+from ECG.ECG_embedding_classification.Enums import ECGClass, ECGStatus
+from ECG.ECG_embedding_classification.classification import classify_signal
 
 
 ###################
@@ -201,3 +203,33 @@ def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Fail
     except Exception as e:
         return Failed(reason='Failed to check for MI due to an internal error',
                       exception=e)
+
+
+def perform_signal_classification(signal: np.ndarray, data_type: ECGClass)\
+        -> Tuple[ECGStatus, TextExplanation] or Failed:
+    """This function performs a binary classification of the signal
+            between normal and abnormal classes. Uses NN for embedding extraction
+            and KNN classifier for binary classification.
+
+        Args:
+            signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
+            data_type (ECGClass): flag responsible for the class of
+                             ECGs that are used as sample data for classifier
+
+        Returns:
+            Tuple[ECGStatus, TextExplanation] or Failed: a tuple containing flag
+                representing presence or absence abnormalities in ECG signal and
+                text explanation or Failed
+    """
+    try:
+        res = classify_signal(signal, data_type)
+        if res == ECGStatus.NORM:
+            text_explanation = 'The signal is ok'
+        else:
+            text_explanation = 'The signal has some abnormalities'
+        return (res, TextExplanation(content=text_explanation))
+    except Exception as e:
+        return Failed(
+            reason='Failed to perform signal classification due to an internal error',
+            exception=e)

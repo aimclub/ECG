@@ -4,10 +4,10 @@ from pathlib import Path
 from PIL import Image
 
 
-def get_ecg_signal(filename):
+def get_ecg_signal(filename, read_nested=True):
     mat = scipy.io.loadmat(filename)
 
-    return np.array(mat['ECG'][0][0][2])
+    return np.array(mat['ECG'][0][0][2]) if read_nested else mat['ECG']
 
 
 def get_ecg_array(filename):
@@ -34,3 +34,8 @@ def compare_values(value, groundtruth, message, multiline=False):
     sep = '\n\t' if multiline else ''
     assert groundtruth == value, \
         f'{message}. {sep}Expected {groundtruth}. {sep}Got {value}.'
+
+
+def check_signal_shape(shape, expected_shape, message):
+    assert shape == expected_shape, \
+        f'{message}. Expected shape {expected_shape}/ Got {shape}.'
