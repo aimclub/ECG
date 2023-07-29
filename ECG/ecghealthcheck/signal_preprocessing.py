@@ -3,12 +3,12 @@ import torch
 import numpy as np
 import neurokit2 as nk
 from typing import List, Tuple
-from ECG.ECG_embedding_classification.utils import ECG_LENGTH
-from ECG.ECG_embedding_classification.Enums import ECGClass
-from ECG.ECG_embedding_classification.utils import few_shot_files
-from ECG.ECG_embedding_classification.utils import FILTER_METHOD
-from ECG.ECG_embedding_classification.utils import normalization_params
-from ECG.ECG_embedding_classification.Models.FullModel import Classificator
+from ECG.ecghealthcheck.utils import ECG_LENGTH
+from ECG.ecghealthcheck.enums import ECGClass
+from ECG.ecghealthcheck.utils import few_shot_files
+from ECG.ecghealthcheck.utils import FILTER_METHOD
+from ECG.ecghealthcheck.utils import normalization_params
+from ECG.ecghealthcheck.models.classificator import Classificator
 
 
 def get_few_shot_data(
@@ -22,10 +22,10 @@ def get_few_shot_data(
 
     for norm, abnorm in zip(normal_files, abnormal_files):
         norm_ecgs.append(scipy.io.loadmat(
-            f'ECG/ECG_embedding_classification/FewShotData/{norm}'
+            f'ECG/ecghealthcheck/data/{norm}'
         )['ECG'][:, :ECG_LENGTH])
         abnorm_ecgs.append(scipy.io.loadmat(
-            f'ECG/ECG_embedding_classification/FewShotData/{abnorm}'
+            f'ECG/ecghealthcheck/data/{abnorm}'
         )['ECG'][:, :ECG_LENGTH])
 
     return norm_ecgs, abnorm_ecgs

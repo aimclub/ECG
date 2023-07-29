@@ -1,8 +1,8 @@
 import torch
 from typing import List
 from sklearn.neighbors import KNeighborsClassifier
-from ECG.ECG_embedding_classification.Enums import ECGStatus
-from ECG.ECG_embedding_classification.Models.EmbeddingModel import EmbeddingModule
+from ECG.ecghealthcheck.enums import ECGStatus
+from ECG.ecghealthcheck.models.embedding import EmbeddingModel
 
 
 class Classificator():
@@ -17,7 +17,7 @@ class Classificator():
             'dropout_rate': 0.2
         }
 
-        self.embedding_extractor = EmbeddingModule(
+        self.embedding_extractor = EmbeddingModel(
             kernel_size=extractor_params['kernel_size'],
             num_features=extractor_params['num_features'],
             like_LU_func=extractor_params['activation_function'],
@@ -26,7 +26,7 @@ class Classificator():
         )
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.embedding_extractor.load_state_dict(torch.load(
-            f='ECG/ECG_embedding_classification/Networks/embedding_extractor.pth',
+            f='ECG/ecghealthcheck/networks/embedding_extractor.pth',
             map_location=self.device))
         self.embedding_extractor.train(False)
 
@@ -52,8 +52,8 @@ class Classificator():
 
         self.classifier.fit(embeddings, labels)
 
-    def predict(self, ecg: torch.Tensor) -> ECGStatus:
+    def predict(self, ecg: torch.Tensor) -> bool:
         with torch.no_grad():
             embedding = torch.squeeze(self.embedding_extractor(ecg)).detach().numpy()
             res = self.classifier.predict(embedding.reshape(1, -1))[0]
-            return ECGStatus.NORM if res == ECGStatus.NORM.value else ECGStatus.ABNORM
+            return True if res == ECGStatus.NORM.value else False

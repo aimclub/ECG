@@ -1,8 +1,7 @@
-import torch
 import torch.nn as nn
 
 
-class Siamese(nn.Module):
+class SiameseModel(nn.Module):
 
     def __init__(self,
                  kernel_size,
@@ -11,7 +10,7 @@ class Siamese(nn.Module):
                  norm1d,
                  dropout_rate
                  ):
-        super(Siamese, self).__init__()
+        super(SiameseModel, self).__init__()
 
         self.conv0 = nn.Sequential(
             nn.Conv1d(12, num_features, kernel_size=kernel_size + 1),

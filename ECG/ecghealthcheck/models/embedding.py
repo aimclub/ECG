@@ -1,7 +1,7 @@
-from ECG.ECG_embedding_classification.Models.SiameseModel import Siamese
+from ECG.ecghealthcheck.models.siamese import SiameseModel
 
 
-class EmbeddingModule(Siamese):
+class EmbeddingModel(SiameseModel):
     def __init__(self,
                  kernel_size,
                  num_features,
@@ -10,7 +10,7 @@ class EmbeddingModule(Siamese):
                  dropout_rate
                  ):
         super(
-            EmbeddingModule,
+            EmbeddingModel,
             self).__init__(
             kernel_size,
             num_features,

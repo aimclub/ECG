@@ -1,4 +1,4 @@
-from ECG.ECG_embedding_classification.Enums import ECGClass
+from ECG.ecghealthcheck.enums import ECGClass
 
 few_shot_files = {
     ECGClass.NORM: [
