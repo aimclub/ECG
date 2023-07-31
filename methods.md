@@ -65,3 +65,10 @@ All NN-based methods use custom CNN architectures [1]. NN-based diagnostics is e
 [1] - Krizhevsky, Alex & Sutskever, Ilya & Hinton, Geoffrey. (2012). ImageNet Classification with Deep Convolutional Neural Networks. Neural Information Processing Systems. 25. 10.1145/3065386. 
 
 [2] - R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh and D. Batra, "Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization," 2017 IEEE International Conference on Computer Vision (ICCV), 2017, pp. 618-626, doi: 10.1109/ICCV.2017.74.
+
+### ECG embedding classification
+ECG classification is performed between normal and abnormal classes. The embeddings which are extracted with help of deep convolutional network are classified by k-nearest-neighbour classifier.
+
+![ste_histogram](images/embedding-classification-accuracy.png)
+
+The KNN classifier is trained on a few shot data, as the greatest improvement in metric performance is observed on a small set of training data.
