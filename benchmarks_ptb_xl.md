@@ -1,8 +1,8 @@
 ## Benchmarks
     
-All methods except of `ecg_is_normal` were trained on [CPSC 2018](http://2018.icbeb.org/Challenge.html). For benchmarking [PTB-XL](https://physionet.org/content/ptb-xl/1.0.1/) dataset was used.
+All methods except for `ecg_is_normal` were trained on [CPSC 2018](http://2018.icbeb.org/Challenge.html). For benchmarking [PTB-XL](https://physionet.org/content/ptb-xl/1.0.1/) dataset was used.
 
-Method `ecg_is_normal` was trained, validated and tested on [PTB-XL](https://physionet.org/content/ptb-xl/1.0.1/) dataset. 1-8 folds were used for the training set, 9 fold for the validation set and 10 fold for the test set of the entire dataset, respectively.
+Method `ecg_is_normal` was trained, validated and tested on [PTB-XL](https://physionet.org/content/ptb-xl/1.0.1/) dataset. Folds 1-8 were used as the training set, fold 9 as the validation set and fold 10 as the test set of the entire dataset, respectively.
 
 ### Detect significant ST-elevation
 We perform evaluation using 2 metrics:
@@ -36,22 +36,16 @@ F1-score is used to evaluate each.
 | BER  | 33.79%  |
 | MI  | 56.55%  |
 
-### ECG embedding classification
-
-#### Classification between Normal and Abnormal classes
+### Classification between Normal and Abnormal classes
 
 Performed with `ecg_is_normal`.
 
-It is possible to specify a separate class of abnormalities for which sample data will be selected:
+The model supports specifying the abnormality class for which subset data will be selected:
  - STTC (ST/T Change)
  - MI (Myocardial Infarction)
  - HYP (Hypertrophy)
  - CD (Conduction Disturbance)
  - ALL (All available classes)
-
-The following parameters were used to train the KNN-classifier:
- - Neighbours number = 3
- - Shots number (sample data) = 7
 
 Accuracy and F1-score are used to evaluate each scenario.
 
