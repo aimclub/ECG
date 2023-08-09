@@ -25,9 +25,16 @@ def open_image(path):
     return data
 
 
-def check_data_type(object, expected_type):
+def _check_data_type_message(object, expected_type, message):
+    if message is None:
+        return f"Wrong data type: expected {expected_type}, got {type(object)}"
+    else:
+        return f"{message}. Wrong data type: expected {expected_type}, got {type(object)}"
+
+
+def check_data_type(object, expected_type, message=None):
     assert isinstance(object, expected_type), \
-        f"Wrong data type: expected {expected_type}, got {type(object)}"
+        _check_data_type_message(object, expected_type, message)
 
 
 def compare_values(value, groundtruth, message, multiline=False):

@@ -1,6 +1,7 @@
 from PIL import Image
+import matplotlib.pyplot
 import numpy as np
-from typing import Tuple
+from typing import Dict, List, Tuple
 from ECG.criterion_based_approach.pipeline import detect_risk_markers, diagnose, get_ste
 from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
     TextExplanation, TextAndImageExplanation
@@ -9,6 +10,10 @@ from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
 from ECG.ecghealthcheck.enums import ECGClass
 from ECG.ecghealthcheck.classification import ecg_is_normal
+from ECG.qrs import qrs
+
+
+QRS_COMPLEX = List[Dict[str, List[int]]]
 
 
 ###################
@@ -233,3 +238,71 @@ def check_ecg_is_normal(signal: np.ndarray, data_type: ECGClass)\
         return Failed(
             reason='Failed to perform signal classification due to an internal error',
             exception=e)
+
+
+###################
+## QRS complex ####
+###################
+
+def get_qrs_complex(signal: np.ndarray, sampling_rate: int)\
+        -> Tuple[np.ndarray, List[Dict[str, List[int]]]] or Failed:
+    """This function checks for significant ST elevation using classic CV methods.
+
+    Args:
+        signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
+        sampling_rate (int): sampling rate (see readme for the requirements)
+
+    Returns:
+        Tuple[np.ndarray, List[Dict[str, List[int]]]] or Failed: a 2-elemnt tuple
+            where first element is cleaned signal and second element is
+            a list of per-channel dictionaries mapping QRS-complex waves
+            to their peaks coordinates in the channel or Failed
+    """
+    try:
+        return qrs.get_qrs(signal, sampling_rate)
+    except Exception as e:
+        return Failed(
+            reason='Failed to get QRS complex peaks',
+            exception=e)
+
+
+def show_channel_qrs_complex(signal: np.ndarray, qrs_peaks: QRS_COMPLEX, channel: int)\
+        -> matplotlib.pyplot.Figure or Failed:
+    """This function checks for significant ST elevation using classic CV methods.
+
+    Args:
+        signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
+        qrs_peaks (List[Dict[str, List[int]]]): list of per-channel dictionaries mapping
+            QRS-complex waves to their peaks coordinates in the channel
+        channel (int): index of the channel to display
+
+    Returns:
+        matplotlib.pyplot.Figure: a figure with visualization of qrs-complex
+            of `channel`-th channel in the signal or Failed
+    """
+    try:
+        return qrs.show_channel_qrs(signal[channel], qrs_peaks[channel])
+    except Exception as e:
+        return Failed(reason='Failed to display QRS-complex', exception=e)
+
+
+def show_full_qrs_complex(signal: np.ndarray, qrs_peaks: List[Dict[str, List[int]]])\
+        -> matplotlib.pyplot.Figure or Failed:
+    """This function checks for significant ST elevation using classic CV methods.
+
+    Args:
+        signal (np.ndarray): array representation of ECG signal
+                             (contains 12 rows, i-th row for i-th lead)
+        qrs_peaks (List[Dict[str, List[int]]]): list of per-channel dictionaries mapping
+            QRS-complex waves to their peaks coordinates in the channel
+
+    Returns:
+        matplotlib.pyplot.Figure: a figure with visualization of qrs-complex
+            of the signal or Failed
+    """
+    try:
+        return qrs.show_full_qrs(signal, qrs_peaks)
+    except Exception as e:
+        return Failed(reason='Failed to display QRS-complex', exception=e)
