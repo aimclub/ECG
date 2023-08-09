@@ -5,7 +5,7 @@ import numpy
 import numpy as np
 import ECG.api as api
 from PIL import Image
-from ECG.condition.enums import ECGClass
+from ECG.condition.enums import Condition
 from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
     TextExplanation, TextAndImageExplanation
 from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
@@ -222,7 +222,7 @@ def test_check_ecg_is_normal_positive():
     filename = './tests/test_data/class_norm.mat'
     signal = get_ecg_signal(filename, read_nested=False)[:, :4000]
     check_signal_shape(signal.shape, (12, 4000), "Wrong signal shape")
-    result = api.check_ecg_is_normal(signal, ECGClass.ALL)
+    result = api.check_condition(signal, Condition.ANY)
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to classify signal")
@@ -233,7 +233,7 @@ def test_check_ecg_is_normal_negative():
     filename = './tests/test_data/class_abnorm.mat'
     signal = get_ecg_signal(filename, read_nested=False)[:, :4000]
     check_signal_shape(signal.shape, (12, 4000), "Wrong signal shape")
-    result = api.check_ecg_is_normal(signal, ECGClass.ALL)
+    result = api.check_condition(signal, Condition.ANY)
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to classify signal")

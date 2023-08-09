@@ -8,8 +8,8 @@ from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
-from ECG.condition.enums import ECGClass
-from ECG.condition.classification import ecg_is_normal
+from ECG.condition.enums import Condition
+from ECG.condition.classification import is_condition_present
 from ECG.qrs import qrs
 
 
@@ -210,33 +210,28 @@ def check_MI_with_NN(signal: np.ndarray) -> Tuple[bool, TextExplanation] or Fail
                       exception=e)
 
 
-def check_ecg_is_normal(signal: np.ndarray, data_type: ECGClass)\
+def check_condition(signal: np.ndarray, condition: Condition)\
         -> Tuple[bool, TextExplanation] or Failed:
-    """This function performs a binary classification of the signal
-            between normal and abnormal classes. Uses NN for embedding extraction
-            and KNN classifier for binary classification.
+    """This function checks if specified condition is present.
 
         Args:
             signal (np.ndarray): array representation of ECG signal
                              (contains 12 rows, i-th row for i-th lead)
-            data_type (ECGClass): flag responsible for the class of
-                             ECGs that are used as sample data for classifier
+            condition (Condition): condition to check for
 
         Returns:
-            Tuple[bool, TextExplanation] or Failed: a tuple containing a flag
-                explaining whether the signal is normal or there are some abnormalities
-                in it and text explanation or Failed
+            Tuple[bool, TextExplanation] or Failed: a tuple containing 
+                a flag for presence of the specified condition 
+                and text explanation or Failed
     """
     try:
-        res = ecg_is_normal(signal, data_type)
-        if res is True:
-            text_explanation = 'The signal is ok'
-        else:
-            text_explanation = 'The signal has some abnormalities'
-        return (res, TextExplanation(content=text_explanation))
+        is_present = is_condition_present(signal, condition)
+        text_explanation = f'Condition "{condition.value}" is '\
+            + ('present' if is_present else "absent")
+        return (is_present, TextExplanation(content=text_explanation))
     except Exception as e:
         return Failed(
-            reason='Failed to perform signal classification due to an internal error',
+            reason='Failed to check ECG signal for condition due to an internal error',
             exception=e)
 
 

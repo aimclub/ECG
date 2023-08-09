@@ -1,9 +1,8 @@
 from enum import Enum
 
 
-class ECGClass(Enum):
-    NORM = 'norm'
-    ALL = 'all'
+class Condition(Enum):
+    ANY = 'all'
     STTC = 'sttc'
     MI = 'mi'
 

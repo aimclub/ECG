@@ -1,38 +1,50 @@
-from ECG.condition.enums import ECGClass
+from ECG.condition.enums import Condition
 
-few_shot_files = {
-    ECGClass.NORM: [
+
+def get_normal_files():
+    return [
         '01630.mat',
         '19669.mat',
         '01700.mat',
         '15090.mat',
         '12886.mat',
         '09449.mat',
-        '05946.mat'],
-    ECGClass.ALL: [
+        '05946.mat'
+    ]
+
+def get_condition_files(condition: Condition):
+    if condition == Condition.ANY:
+        return [
         '07003.mat',
         '17325.mat',
         '02119.mat',
         '20313.mat',
         '04476.mat',
         '12646.mat',
-        '08185.mat'],
-    ECGClass.STTC: [
+        '08185.mat'
+    ]
+    elif condition == Condition.STTC:
+        return [
         '17309.mat',
         '10115.mat',
         '02322.mat',
         '00569.mat',
         '04508.mat',
         '08139.mat',
-        '18520.mat'],
-    ECGClass.MI: [
+        '18520.mat'
+    ]
+    elif condition == Condition.MI:
+        return [
         '16712.mat',
         '10837.mat',
         '03052.mat',
         '00947.mat',
         '04646.mat',
         '08278.mat',
-        '17951.mat']}
+        '17951.mat'
+    ]
+    else:
+        raise Exception(f'Unsupported condition {condition}')
 
 normalization_params = {
     'mean': [
