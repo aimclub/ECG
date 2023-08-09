@@ -1,4 +1,4 @@
-from ECG.ecghealthcheck.models.siamese import SiameseModel
+from ECG.condition.models.siamese import SiameseModel
 
 
 class EmbeddingModel(SiameseModel):

@@ -1,8 +1,8 @@
 import torch
 from typing import List
 from sklearn.neighbors import KNeighborsClassifier
-from ECG.ecghealthcheck.enums import ECGStatus
-from ECG.ecghealthcheck.models.embedding import EmbeddingModel
+from ECG.condition.enums import ECGStatus
+from ECG.condition.models.embedding import EmbeddingModel
 
 
 class Classificator():

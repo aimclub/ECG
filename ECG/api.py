@@ -8,8 +8,8 @@ from ECG.data_classes import Diagnosis, ElevatedST, RiskMarkers, Failed, \
 from ECG.digitization.preprocessing import adjust_image, binarization
 from ECG.digitization.digitization import grid_detection, signal_extraction
 import ECG.NN_based_approach.pipeline as NN_pipeline
-from ECG.ecghealthcheck.enums import ECGClass
-from ECG.ecghealthcheck.classification import ecg_is_normal
+from ECG.condition.enums import ECGClass
+from ECG.condition.classification import ecg_is_normal
 from ECG.qrs import qrs
 
 

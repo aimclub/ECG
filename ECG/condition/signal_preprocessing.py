@@ -3,12 +3,12 @@ import torch
 import numpy as np
 import neurokit2 as nk
 from typing import List, Tuple
-from ECG.ecghealthcheck.utils import ECG_LENGTH
-from ECG.ecghealthcheck.enums import ECGClass
-from ECG.ecghealthcheck.utils import few_shot_files
-from ECG.ecghealthcheck.utils import FILTER_METHOD
-from ECG.ecghealthcheck.utils import normalization_params
-from ECG.ecghealthcheck.models.classificator import Classificator
+from ECG.condition.utils import ECG_LENGTH
+from ECG.condition.enums import ECGClass
+from ECG.condition.utils import few_shot_files
+from ECG.condition.utils import FILTER_METHOD
+from ECG.condition.utils import normalization_params
+from ECG.condition.models.classificator import Classificator
 
 
 def get_few_shot_data(

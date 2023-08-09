@@ -1,9 +1,9 @@
 import numpy as np
-from ECG.ecghealthcheck.enums import ECGClass
-from ECG.ecghealthcheck.signal_preprocessing import get_model
-from ECG.ecghealthcheck.signal_preprocessing import filter_ecg
-from ECG.ecghealthcheck.signal_preprocessing import ecg_to_tensor
-from ECG.ecghealthcheck.signal_preprocessing import normalize_ecg
+from ECG.condition.enums import ECGClass
+from ECG.condition.signal_preprocessing import get_model
+from ECG.condition.signal_preprocessing import filter_ecg
+from ECG.condition.signal_preprocessing import ecg_to_tensor
+from ECG.condition.signal_preprocessing import normalize_ecg
 
 
 def ecg_is_normal(signal: np.ndarray, data_type: ECGClass) -> bool:

@@ -5,7 +5,7 @@ import numpy
 import numpy as np
 import ECG.api as api
 from PIL import Image
-from ECG.ecghealthcheck.enums import ECGClass
+from ECG.condition.enums import ECGClass
 from ECG.data_classes import Diagnosis, ElevatedST, Failed, RiskMarkers,\
     TextExplanation, TextAndImageExplanation
 from tests.test_util import get_ecg_signal, get_ecg_array, open_image,\
