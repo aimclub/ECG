@@ -66,13 +66,15 @@ All NN-based methods use custom CNN architectures [1]. NN-based diagnostics is e
 
 [2] - R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh and D. Batra, "Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization," 2017 IEEE International Conference on Computer Vision (ICCV), 2017, pp. 618-626, doi: 10.1109/ICCV.2017.74.
 
-### ECG embedding classification
-ECG classification is performed between normal and abnormal classes. The embeddings which are extracted with help of deep convolutional network are classified by k-nearest-neighbour classifier.
+### Checking for conditions using embeddings and kNN
+ECG classification is performed between normal and abnormal classes. The embeddings which are extracted with help of deep convolutional network are classified by k-nearest-neighbour (kNN) classifier.
 
-The EGG embedding extractor (CNN) was trained using the Siamese networks approach on all classes of the [PTB-XL](https://physionet.org/content/ptb-xl/1.0.1/) dataset. During training, ECG pairs of the form {NORMAL, NORMAL} and {NORMAL, ABNORMAL} were passed through the network, and the resulting distances between their elements were calculated. These distances were provided to loss function called Contrastive Loss, which goal is is to minimize the distance between similar pairs of inputs (NORMAL and NORMAL) while maximizing the distance between dissimilar pairs (NORMAL and ABNORMAL). As a result, the trained embedding extractor is able to compute embeddings of ECGs for both healthy and unhealthy classes of the entire dataset dataset.
+The EGG embedding extractor (CNN) was trained using the Siamese networks approach on all classes of the [PTB-XL](https://physionet.org/content/ptb-xl/1.0.1/) dataset. During training, ECG pairs of the form {NORMAL, NORMAL} and {NORMAL, ABNORMAL} were passed through the network, and the resulting distances between their elements were calculated. These distances were provided to loss function called Contrastive Loss [1], which goal is is to minimize the distance between similar pairs of inputs (NORMAL and NORMAL) while maximizing the distance between dissimilar pairs (NORMAL and ABNORMAL). As a result, the trained embedding extractor is able to compute embeddings of ECGs for both healthy and unhealthy classes of the entire dataset dataset.
 
 Classification is performed with kNN classifier (k=3) on a subset of training data (their embeddings). The subset consists of 7 randomly chosen normal ECG signals and 7 randomly chosen ECG signals with the abnormality of interest.
 
 ![ste_histogram](images/embedding-classification-accuracy.png)
 
 The greatest improvement in metric performance is observed on a small set of training data. Specifically, 3 samples of each normal and abnormal ECG are already enough to achieve high metrics performance.
+
+[1] - Chopra, Sumit & Hadsell, Raia & Lecun, Yann. (2005). Learning a similarity metric discriminatively, with application to face verification. Proc. Computer Vision and Pattern Recognition. 1. 539- 546 vol. 1. 10.1109/CVPR.2005.202. 
