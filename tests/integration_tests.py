@@ -1,3 +1,7 @@
+from distutils.command.clean import clean
+import math
+import pickle
+import numpy
 import numpy as np
 import ECG.api as api
 from PIL import Image
@@ -31,6 +35,10 @@ def _get_NN_test_data(option):
         'normal': './tests/test_data/NORMAL.mat'
     }
     return options[option]
+
+
+def _get_qrs_signal():
+    return get_ecg_signal('./tests/test_data/NORMAL.mat')
 
 
 ###################
@@ -230,3 +238,62 @@ def test_check_ecg_is_normal_negative():
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to classify signal")
     check_text_explanation(result[1], "The signal has some abnormalities")
+
+
+###################
+## QRS complex ####
+###################
+
+def _is_equal_peak_value(observed_value, expected_value):
+    if math.isnan(expected_value):
+        return math.isnan(observed_value)
+    else:
+        return observed_value == expected_value
+
+
+def _compare_peak_values(observed, expected, message):
+    check_data_type(observed, list, message)
+    compare_values(len(observed), len(expected), f'{message}, checking length')
+    values_equality = [_is_equal_peak_value(o, e) for (o, e) in zip(observed, expected)]
+    assert np.array(values_equality).all(), \
+        f'{message}. Wrong values: expected {expected}, got {observed}'
+
+
+def test_get_qrs_complex_success():
+    signal = _get_qrs_signal()
+    sampling_rate = 500
+    result = api.get_qrs_complex(signal, sampling_rate)
+
+    check_data_type(result, tuple)
+    assert len(result) == 2, f"expected tuple of length 2, got {len(result)}"
+    cleaned_signal, peaks = result
+
+    # check signal
+    check_data_type(cleaned_signal, numpy.ndarray)
+    expected_cleaned_signal = np.load('./tests/test_data/cleaned.npy')
+    assert cleaned_signal.shape == expected_cleaned_signal.shape, \
+        f'expected array of shape {expected_cleaned_signal.shape}, ' \
+        + f'got array of shape {cleaned_signal.shape}'
+    assert (cleaned_signal == expected_cleaned_signal).all(), \
+        'cleaned signal does not match expected value'
+
+    # check peaks
+    check_data_type(peaks, list)
+    for i, el in enumerate(peaks):
+        assert set(el.keys()) == set('PQRST'), f'wrong keys in {i}-th element'
+    with open('tests/test_data/peaks.pkl', 'rb') as f:
+        expected_peaks = pickle.load(f)
+    for i in range(len(expected_peaks)):
+        for key in 'PQRST':
+            _compare_peak_values(
+                peaks[i][key],
+                expected_peaks[i][key],
+                f'Channel {i}, wave {key}'
+            )
+
+
+def test_get_qrs_complex_fail():
+    signal = _get_qrs_signal()
+    sampling_rate = 500
+    result = api.get_qrs_complex(signal[0], sampling_rate)
+    check_data_type(result, Failed)
