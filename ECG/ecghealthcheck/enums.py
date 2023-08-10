@@ -6,6 +6,8 @@ class ECGClass(Enum):
     ALL = 'all'
     STTC = 'sttc'
     MI = 'mi'
+    HYP = 'hyp'
+    CD = 'cd'
 
 
 class ECGStatus(Enum):
