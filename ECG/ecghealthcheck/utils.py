@@ -32,7 +32,23 @@ few_shot_files = {
         '00947.mat',
         '04646.mat',
         '08278.mat',
-        '17951.mat']}
+        '17951.mat'],
+    ECGClass.HYP: [
+        '07812.mat',
+        '14004.mat',
+        '07670.mat',
+        '16357.mat',
+        '15787.mat',
+        '08209.mat',
+        '07700.mat'],
+    ECGClass.CD: [
+        '21011.mat',
+        '13248.mat',
+        '03827.mat',
+        '00950.mat',
+        '06355.mat',
+        '10822.mat',
+        '04618.mat']}
 
 normalization_params = {
     'mean': [
