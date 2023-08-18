@@ -6,15 +6,24 @@ This repository contains ECG Recognition Library - an open-source library for as
 ## Project Description
 
 ### ECG Features
+ECG Recognition Library provides tools for diagnosistcs of several conditions:
+* MI (Myocardial Infarction)
+* BER (Benign Early Repolarisation)
+* HYP (Hypertrophy)
+* STTC (ST/T Change)
+* CD (Conduction Disturbance)
+
 Main features implemented in the library
 1. Recognition of ECG signal from a photo of printed ECG
 1. Detection of ST-elevation
-1. IM risk markers evaluation
-1. IM/BER differential diagnosis
+1. MI risk markers evaluation
+1. MI/BER differential diagnosis
+1. Health check for MI, HYP, STTC, CD
 
 Thus compared to other frameworks, ECG Recognition Library:
 * Handles ECGs provised as a signal as well as an image
-* Provides a range of functionality useful for IM diagnostics
+* Provides a range of functionality useful for MI diagnostics
+* Provides health checks for several conditions
 
 ![project_structure_signal](docs/signal_pipeline.png)
 ![project_structure_ddx](docs/ddx_pipeline.png)
