@@ -51,8 +51,8 @@ Accuracy and F1-score are used to evaluate each scenario.
 
 | Abnormality class | Accuracy | F1-score |
 | --- | --- | --- |
-| STTC | 88.41%  | 90.85% |
-| MI | 86.95%  | 90.42% |
-| HYP | 91.02%  | 94.27% |
-| CD | 89.31%  | 92.61% |
-| ALL | 86.91%  | 81.71% |
+| STTC | 89.75%  | 92.44% |
+| MI | 88.74%  | 91.55% |
+| HYP | 87.39%  | 91.6% |
+| CD | 91.69%  | 94.04% |
+| ALL | 89.04%  | 84.44% |
