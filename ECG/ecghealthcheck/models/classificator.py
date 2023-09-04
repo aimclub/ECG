@@ -1,8 +1,13 @@
 import torch
+import numpy as np
+from PIL import Image
 from typing import List
+import matplotlib.pyplot as plt
+from scipy.signal import resample
 from sklearn.neighbors import KNeighborsClassifier
 from ECG.ecghealthcheck.enums import ECGStatus
 from ECG.ecghealthcheck.models.embedding import EmbeddingModel
+from ECG.ecghealthcheck.models.gradcam import GradCAM
 
 
 class Classificator():
@@ -33,7 +38,11 @@ class Classificator():
 
         self.classifier = KNeighborsClassifier(n_neighbors=3)
 
+        self.abnorm_signal_for_xai = None
+
     def fit(self, norm_ecgs: List[torch.Tensor], abnorm_ecgs: List[torch.Tensor]):
+
+        self.abnorm_signal_for_xai = abnorm_ecgs[0]
 
         embeddings = []
         labels = []
@@ -54,7 +63,51 @@ class Classificator():
         self.classifier.fit(embeddings, labels)
 
     def predict(self, ecg: torch.Tensor) -> bool:
+
         with torch.no_grad():
             embedding = torch.squeeze(self.embedding_extractor(ecg)).detach().numpy()
             res = self.classifier.predict(embedding.reshape(1, -1))[0]
-            return True if res == ECGStatus.NORM.value else False
+
+        return True if res == ECGStatus.NORM.value else False
+
+    def perform_xai(self, signal):
+
+        cam = GradCAM(self.embedding_extractor)
+        cam.register_hooks(self.embedding_extractor.res_blocks[-2])
+
+        self.embedding_extractor.zero_grad()
+        gr_cam_results = cam.compute_grads(signal, self.abnorm_signal_for_xai)
+
+        ecgs = (
+            signal[0].detach().cpu().numpy(),
+            self.abnorm_signal_for_xai[0].detach().cpu().numpy()
+        )
+
+        fig, axs = plt.subplots(6, 2)
+        fig.set_size_inches(18.5, 10.5)
+        for i in range(len(ecgs)):
+
+            for lead in range(6):
+                print(ecgs[i].shape)
+                data = ecgs[i][lead]
+
+                heatmap = gr_cam_results[i][0].detach().numpy()
+                heatmap = resample(heatmap, len(data))
+                heatmap = (heatmap - np.min(heatmap)) / \
+                    (np.max(heatmap) - np.min(heatmap))
+
+                for j, heat_val in enumerate(heatmap):
+                    axs[lead, i].axvline(x=j, color=(heat_val, 0, 0))
+                axs[lead, i].plot(data)
+                if lead == 0:
+                    axs[lead, i].set_title('INPUT' if i == 0 else 'COMPARED', fontsize=20)
+
+        fig.canvas.draw()
+
+        rgb = fig.canvas.tostring_rgb()
+
+        width, height = fig.canvas.get_width_height()
+
+        img = Image.frombytes('RGB', (width, height), rgb)
+
+        return img

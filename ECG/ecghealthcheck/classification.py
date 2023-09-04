@@ -13,4 +13,7 @@ def ecg_is_normal(signal: np.ndarray, data_type: ECGClass) -> bool:
     signal = normalize_ecg(signal)
     signal = ecg_to_tensor(signal)
 
-    return model.predict(signal)
+    prediction = model.predict(signal)
+    grad_cam = model.perform_xai(signal)
+
+    return prediction, grad_cam
