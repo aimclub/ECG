@@ -65,15 +65,15 @@ class SiameseModel(nn.Module):
         res_blocks = []
         for i in range(n_res):
             in_i = i // 2 + 1
-            out_i = in_i + 1 if i % 2 == 1 else in_i 
+            out_i = in_i + 1 if i % 2 == 1 else in_i
             res_blocks.append(
                 ResBlock(
-                    in_features = num_features*in_i,
-                    out_features = num_features*out_i,
-                    kernel_size = kernel_size + 2,
-                    padding = kernel_size // 2,
-                    dropout_rate = dropout_rate,
-                    bn = norm1d,
+                    in_features=num_features * in_i,
+                    out_features=num_features * out_i,
+                    kernel_size=kernel_size + 2,
+                    padding=kernel_size // 2,
+                    dropout_rate=dropout_rate,
+                    bn=norm1d,
                     f_act=like_LU_func
                 )
             )
