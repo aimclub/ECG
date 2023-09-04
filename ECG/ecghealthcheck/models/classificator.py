@@ -14,7 +14,8 @@ class Classificator():
             'num_features': 92,
             'activation_function': torch.nn.GELU,
             'normalization': torch.nn.BatchNorm1d,
-            'dropout_rate': 0.2
+            'dropout_rate': 0.2,
+            'res_block_num': 4
         }
 
         self.embedding_extractor = EmbeddingModel(
@@ -26,7 +27,7 @@ class Classificator():
         )
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.embedding_extractor.load_state_dict(torch.load(
-            f='ECG/ecghealthcheck/networks/embedding_extractor.pth',
+            f='ECG/ecghealthcheck/networks/embedding_extractor_random.pth',
             map_location=self.device))
         self.embedding_extractor.train(False)
 
