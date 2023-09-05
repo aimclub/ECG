@@ -228,12 +228,12 @@ def check_ecg_is_normal(signal: np.ndarray, data_type: ECGClass)\
                 in it and text explanation or Failed
     """
     try:
-        res = ecg_is_normal(signal, data_type)
+        res, gradcam = ecg_is_normal(signal, data_type)
         if res is True:
             text_explanation = 'The signal is ok'
         else:
             text_explanation = 'The signal has some abnormalities'
-        return (res, TextExplanation(content=text_explanation))
+        return (res, TextAndImageExplanation(text=text_explanation, image=gradcam))
     except Exception as e:
         return Failed(
             reason='Failed to perform signal classification due to an internal error',

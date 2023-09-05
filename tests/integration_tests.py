@@ -226,7 +226,7 @@ def test_check_ecg_is_normal_positive():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], True, "Failed to classify signal")
-    check_text_explanation(result[1], "The signal is ok")
+    check_text_image_explanation(result[1], "The signal is ok")
 
 
 def test_check_ecg_is_normal_negative():
@@ -237,7 +237,7 @@ def test_check_ecg_is_normal_negative():
     check_data_type(result, Tuple)
     compare_values(len(result), 2, "Wrong tuple length")
     compare_values(result[0], False, "Failed to classify signal")
-    check_text_explanation(result[1], "The signal has some abnormalities")
+    check_text_image_explanation(result[1], "The signal has some abnormalities")
 
 
 ###################
