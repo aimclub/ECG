@@ -73,7 +73,7 @@ class Classificator():
     def perform_xai(self, signal):
 
         cam = GradCAM(self.embedding_extractor)
-        cam.register_hooks(self.embedding_extractor.res_blocks[-2])
+        cam.register_hooks(self.embedding_extractor.res_blocks[-1])
 
         self.embedding_extractor.zero_grad()
         gr_cam_results = cam.compute_grads(signal, self.abnorm_signal_for_xai)
@@ -88,7 +88,7 @@ class Classificator():
         for i in range(len(ecgs)):
 
             for lead in range(6):
-                print(ecgs[i].shape)
+
                 data = ecgs[i][lead]
 
                 heatmap = gr_cam_results[i][0].detach().numpy()
@@ -103,6 +103,9 @@ class Classificator():
                     axs[lead, i].set_title('INPUT' if i == 0 else 'COMPARED', fontsize=20)
 
         fig.canvas.draw()
+
+        plt.ioff()
+        plt.close()
 
         rgb = fig.canvas.tostring_rgb()
 
