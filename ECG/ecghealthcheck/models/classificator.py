@@ -88,7 +88,7 @@ class Classificator():
         for i in range(len(ecgs)):
 
             for lead in range(6):
-                
+
                 data = ecgs[i][lead]
 
                 heatmap = gr_cam_results[i][0].detach().numpy()
@@ -103,7 +103,7 @@ class Classificator():
                     axs[lead, i].set_title('INPUT' if i == 0 else 'COMPARED', fontsize=20)
 
         fig.canvas.draw()
-        
+
         plt.ioff()
         plt.close()
 
