@@ -116,6 +116,11 @@ In Russian:
 
 The library was developed in [ITMO University](https://en.itmo.ru/).
 
+### Funding
+Реализовано при финансовой поддержке Фонда поддержки проектов Национальной технологической инициативы в рамках реализации "дорожной карты" развития высокотехнологичного направления "Искусственный интеллект" на период до 2030 года (Договор № 70-2021-00187)
+
+This research is financially supported by the Foundation for National Technology Initiative's Projects Support as a part of the roadmap implementation for the development of the high-tech field of Artificial Intelligence for the period up to 2030 (agreement 70-2021-00187)
+
 ### Developers
 * A. Vatyan - team leader
 * N. Gusarova - chief scientific advisor
